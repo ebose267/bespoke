@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><title>Admin Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0d1008;--bg:#f5f2eb;--card:#fff;--bd:#e4dfd4;--mut:#7a7060;--m2:#a8a090;--acc:#c8860a;--accp:color-mix(in srgb,var(--acc) 12%,#fff);--g:#3a7a2c;--gp:#eaf5e6;--t:#c94f1d;--tp:#fdeee8;--go:#b7791f;--gop:#fdf3e0;--r:14px}
+*{box-sizing:border-box;margin:0;padding:0}html{font-size:15px}
+body{background:var(--bg);color:var(--ink);font-family:'Instrument Sans',sans-serif;min-height:100vh;line-height:1.5;background-image:linear-gradient(rgba(200,134,10,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,134,10,.04) 1px,transparent 1px);background-size:48px 48px}
+h1,h2,h3,.sy{font-family:'Syne',sans-serif}.mono{font-family:'DM Mono',monospace}
+button{font-family:inherit;cursor:pointer}.hide{display:none!important}
+.shell{max-width:1200px;margin:0 auto;padding:0 20px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0 0;flex-wrap:wrap;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}.dot{width:36px;height:36px;border-radius:10px;background:var(--acc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden}
+.dot img{width:100%;height:100%;object-fit:cover}.brand h1{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}.brand small{display:block;font-size:.72rem;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin-top:-2px}
+.tr{display:flex;align-items:center;gap:10px}.upd{font-size:.72rem;color:var(--m2)}
+.pb{padding:8px 16px;background:var(--card);border:1px solid var(--bd);border-radius:50px;font-size:.78rem;font-weight:500;color:var(--mut);transition:.2s}.pb:hover{border-color:var(--acc);color:var(--acc)}
+nav{display:flex;border-bottom:1px solid var(--bd);margin-top:22px;overflow-x:auto;scrollbar-width:none}
+.tab{padding:11px 20px;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;font-size:.84rem;font-weight:500;color:var(--mut);white-space:nowrap}
+.tab.on{color:var(--acc);border-color:var(--acc);font-weight:600}.bd{background:var(--accp);color:var(--acc);font-size:.65rem;font-weight:700;padding:1px 7px;border-radius:50px;margin-left:6px}
+.panel{display:none;padding-top:26px}.panel.on{display:block}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:20px}.pad{padding:22px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px 22px;position:relative;overflow:hidden}
+.kpi:after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--acc))}
+.kl{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}.kv{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+.ct{font-size:.95rem;font-weight:700}.cs{font-size:.75rem;color:var(--mut);margin-top:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:16px}.bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;font-size:.68rem;color:var(--mut)}
+.bar i{display:block;width:100%;background:var(--accp);border:2px solid var(--acc);border-radius:6px;min-height:3px}
+.tb{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--bd);flex-wrap:wrap;gap:10px}
+.search{background:var(--bg);border:1px solid var(--bd);border-radius:50px;padding:7px 14px;font:inherit;font-size:.82rem;outline:0;width:210px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:4px 12px;border:1px solid var(--bd);border-radius:50px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);background:var(--card)}
+.chip.on,.chip:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.wrap{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th{padding:10px 16px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--bd);font-size:.85rem;vertical-align:middle}tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--bg)}
+.sm{font-size:.75rem;color:var(--mut)}.ell{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.78rem;color:var(--mut)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:50px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+.pill:before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7}
+.s-g{background:var(--gp);color:var(--g)}.s-a{background:var(--gop);color:var(--go)}.s-r{background:var(--tp);color:var(--t)}
+.ra{background:none;border:1px solid var(--bd);border-radius:8px;padding:4px 10px;font-size:.72rem;color:var(--mut);margin-right:4px;transition:.18s}.ra:hover{border-color:var(--g);color:var(--g)}.ra.d:hover{border-color:var(--t);color:var(--t)}
+.ra.go{background:var(--g);color:#fff;border-color:var(--g)}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-top:1px solid var(--bd);flex-wrap:wrap;gap:8px}
+.pg{display:flex;gap:4px}.pg button{width:30px;height:30px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--mut);font-size:.78rem}.pg .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.empty{text-align:center;padding:40px;color:var(--m2);font-size:.9rem}
+.thumb{width:40px;height:40px;border-radius:8px;object-fit:cover;background:var(--bg);border:1px solid var(--bd)}
+.btn{padding:10px 22px;border:0;border-radius:50px;background:var(--ink);color:#fff;font-size:.84rem;font-weight:600;transition:.2s}.btn:hover{background:var(--acc)}.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn.g{background:var(--g)}.btn.o{background:var(--card);color:var(--mut);border:1px solid var(--bd)}
+.fl{display:block;font-size:.7rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+.in{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font:inherit;font-size:.86rem;outline:0;margin-bottom:14px}.in:focus{border-color:var(--acc)}textarea.in{min-height:90px;resize:vertical}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}.imgs div{position:relative}.imgs img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)}
+.imgs button{position:absolute;top:-6px;right:-6px;width:20px;height:20px;border:0;border-radius:50%;background:var(--t);color:#fff;font-size:.8rem;line-height:20px;cursor:pointer}
+.mb{position:fixed;inset:0;z-index:200;background:rgba(13,16,8,.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s;padding:16px}
+.mb.on{opacity:1;pointer-events:all}.modal{background:var(--card);border-radius:28px;padding:30px;width:min(520px,100%);max-height:92vh;overflow-y:auto}
+.modal h3{font-size:1.1rem;margin-bottom:6px}.acts{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.warn{background:var(--tp);color:var(--t);border-radius:10px;padding:10px 14px;font-size:.82rem;margin:12px 0}
+#login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.lg{width:min(380px,100%);text-align:center}
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 22px;border-radius:50px;font-size:.84rem;z-index:300;opacity:0;transition:.3s;pointer-events:none}#toast.on{opacity:1}#toast.err{background:var(--t)}
+@media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.grid2{grid-template-columns:1fr}}
+@media(max-width:600px){.kpis{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.search{width:140px}.hm{display:none}}
+</style></head><body>
+
+<div id="login"><div class="lg card pad">
+  <div class="dot" style="margin:0 auto 14px;width:48px;height:48px">🔐</div>
+  <h2 class="sy" style="margin-bottom:4px">Admin Dashboard</h2>
+  <p class="sm" style="margin-bottom:18px">Enter your access token to continue</p>
+  <input class="in" id="tok" type="password" placeholder="Access token" onkeydown="if(event.key==='Enter')login()">
+  <button class="btn" style="width:100%" id="lgb" onclick="login()">Sign in</button>
+  <div class="sm" id="lge" style="color:var(--t);margin-top:12px;min-height:18px"></div>
+</div></div>
+
+<div class="shell hide" id="app">
+  <div class="top">
+    <div class="brand"><div class="dot" id="logo">S</div><div><h1 id="sname">Store</h1><small>Admin Dashboard</small></div></div>
+    <div class="tr"><button class="pb" onclick="load()">↻ Refresh</button><span class="upd mono" id="upd">—</span><button class="pb" onclick="logout()">Sign out</button></div>
+  </div>
+  <nav>
+    <button class="tab on" data-t="ov">Overview</button>
+    <button class="tab" data-t="or">Orders<span class="bd" id="bo">—</span></button>
+    <button class="tab" data-t="pr">Products</button>
+    <button class="tab" data-t="cu">Customers</button>
+    <button class="tab" data-t="se">Settings</button>
+  </nav>
+
+  <div class="panel on" id="p-ov">
+    <div class="kpis">
+      <div class="kpi" style="--c:var(--acc)"><div class="kl">Sales today</div><div class="kv mono" id="k1">—</div></div>
+      <div class="kpi" style="--c:var(--g)"><div class="kl">Orders today</div><div class="kv" id="k2">—</div></div>
+      <div class="kpi" style="--c:var(--go)"><div class="kl">Awaiting payment</div><div class="kv" id="k3">—</div></div>
+      <div class="kpi" style="--c:var(--t)"><div class="kl">Stock alerts</div><div class="kv" id="k4">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card pad"><div class="ct">Paid sales, last 7 days</div><div class="cs">Confirmed payments per day</div><div class="bars" id="bars"></div></div>
+      <div class="card pad"><div class="ct">Stock alerts</div><div class="cs">Items running low or sold out</div><div id="alerts" style="margin-top:10px"></div></div>
+    </div>
+  </div>
+
+  <div class="panel" id="p-or"><div class="card">
+    <div class="tb"><div class="ct">All Orders</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center"><input class="search" id="os" placeholder="Search name, phone, order ID…">
+      <div class="chips" id="oc"><button class="chip on" data-s="all">All</button><button class="chip" data-s="Pending">Pending</button><button class="chip" data-s="Paid">Paid</button><button class="chip" data-s="Cancelled">Cancelled</button></div></div></div>
+    <div class="wrap"><table><thead><tr><th>Order</th><th>Customer</th><th class="hm">Items</th><th>Total</th><th class="hm">Date</th><th>Status</th><th></th></tr></thead><tbody id="ot"></tbody></table></div>
+    <div class="foot"><span class="sm" id="oi">—</span><div class="pg" id="opg"></div></div>
+  </div></div>
+
+  <div class="panel" id="p-pr"><div class="card">
+    <div class="tb"><div class="ct">Products</div><button class="btn" onclick="editProd()">+ Add product</button></div>
+    <div class="wrap"><table><thead><tr><th></th><th>Name</th><th class="hm">Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead><tbody id="pt"></tbody></table></div>
+  </div></div>
+
+  <div class="panel" id="p-cu"><div class="card">
+    <div class="tb"><div class="ct">Customers</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><input class="search" id="cs" placeholder="Search name or email…"><button class="pb" onclick="exportSubs()">⬇ Subscribers CSV</button></div></div>
+    <div class="wrap"><table><thead><tr><th>Customer</th><th class="hm">Phone</th><th>Orders</th><th>Spent</th><th>Newsletter</th><th></th></tr></thead><tbody id="ct"></tbody></table></div>
+  </div></div>
+
+  <div class="panel" id="p-se"><div class="card pad" style="max-width:640px">
+    <div class="ct" style="margin-bottom:16px">Store settings</div><div id="sf"></div>
+    <button class="btn" onclick="saveSet()">Save settings</button>
+  </div></div>
+</div>
+
+<div class="mb" id="mb"><div class="modal" id="md"></div></div>
+<div id="toast"></div>
+
+<script>
+/* ===== CONFIG ===== */
+// Keep the deployed Apps Script URL here; update the deployment version, not this URL, for code-only releases.
+const API='__API_URL__';
+// These identify the Cloudinary account and its restricted unsigned upload preset.
+const CLOUD='__CLOUDINARY_CLOUD__', PRESET='__CLOUDINARY_PRESET__';
+// Guard: fail loudly if scripts/build-admin.mjs has not filled the placeholders for this client.
+const NOT_CONFIGURED=/^__[A-Z_]+__$/.test(API);
+// Orders are shown ten at a time so the table stays usable on a phone.
+const SIZE=10;
+// Keep current dashboard data and the selected item in memory.
+let LOADED_STOCK,S='',ORD=[],PRO=[],CUS=[],SET={},DASH={},os='all',oq='',op=1,IMG=[],cur=null,editingProductId='',editingCustomerEmail='',productCreateRequestId='',toastTimer=0;
+// Short DOM helper, like a label on a box in the dashboard.
+const $=id=>document.getElementById(id);
+// Escape text before placing it in HTML.
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Only attach absolute HTTPS URLs to images, including data inherited from older Sheets.
+function secureImageUrl(value){try{const url=new URL(String(value||''));return url.protocol==='https:'?url.href:''}catch(error){return ''}}
+// Format prices in the store's configured currency.
+const money=n=>(SET.currency_symbol||'₦')+(Number.isFinite(Number(n))?Math.round(Number(n)).toLocaleString('en-NG'):'0');
+// Convert known states to dashboard badge colours.
+const pc=s=>({Paid:'g','In Stock':'g',Pending:'a','Few Left':'a',Cancelled:'r','Out of Stock':'r'}[s]||'a');
+// Render a safe status badge.
+const pill=s=>`<span class="pill s-${pc(s)}">${esc(s)}</span>`;
+// Show one message and reset the old timer so a previous toast cannot hide a newer one.
+function toast(message,error){const node=$('toast');node.textContent=message;node.className='on'+(error?' err':'');clearTimeout(toastTimer);toastTimer=setTimeout(()=>node.className='',3200)}
+
+/* ===== API ===== */
+// All owner requests use the short-lived session and the Apps Script-safe text/plain transport.
+async function api(action,data){
+  if(NOT_CONFIGURED)throw new Error('This dashboard has not been configured with an API URL. Run the build-admin script for this client.');
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),30000);
+  try{
+    const response=await fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({action,session:S},data||{})),signal:controller.signal});
+    const raw=await response.text();
+    let result;
+    try{result=JSON.parse(raw)}catch(e){throw new Error('The server returned an unreadable response. Check the Apps Script deployment and try again.')}
+    if(!response.ok)throw new Error('Server request failed ('+response.status+').');
+    if(!result.ok){const error=new Error(result.error||'Something went wrong.');error.data=result;if(/log in again/i.test(error.message)){logout();}throw error}
+    return result;
+  }catch(error){
+    if(error.name==='AbortError')throw new Error('The request timed out. Refresh the dashboard before repeating the action.');
+    throw error;
+  }finally{clearTimeout(timeout)}
+}
+
+/* ===== LOGIN ===== */
+// Sign in, then show the dashboard only after every required data request succeeds.
+async function login(){
+  const button=$('lgb');button.disabled=true;button.textContent='Checking…';$('lge').textContent='';
+  try{
+    const result=await api('login',{token:$('tok').value.trim()});
+    S=result.session;
+    try{sessionStorage.setItem('s',S)}catch(e){}
+    $('tok').value='';
+    const loaded=await load();
+    if(!loaded){logout();throw new Error('Sign-in succeeded, but dashboard data could not be loaded. Check your connection and try again.')}
+    $('login').classList.add('hide');$('app').classList.remove('hide');
+  }catch(error){$('lge').textContent=error.message}
+  finally{button.disabled=false;button.textContent='Sign in'}
+}
+// Clear the local session and sensitive customer/order data when the owner signs out.
+function logout(){
+  // Clear both JavaScript state and rendered customer/order details before hiding the dashboard.
+  S='';ORD=[];PRO=[];CUS=[];SET={};DASH={};cur=null;IMG=[];editingProductId='';editingCustomerEmail='';
+  try{sessionStorage.removeItem('s')}catch(e){}
+  ['ot','pt','ct','bars','alerts','sf'].forEach(id=>{if($(id))$(id).innerHTML=''});
+  ['k1','k2','k3','k4','bo','upd','sname'].forEach(id=>{if($(id))$(id).textContent=''});
+  $('logo').textContent='S';$('tok').value='';$('md').innerHTML='';
+  $('app').classList.add('hide');$('login').classList.remove('hide');closeM();
+}
+// Restore a still-valid tab session after a page refresh.
+async function start(){
+  if(!S)return;
+  const loaded=await load();
+  if(loaded){$('login').classList.add('hide');$('app').classList.remove('hide')}
+  else logout();
+}
+
+/* ===== LOAD EVERYTHING ===== */
+// Fetch all dashboard panels together; never replace good data with half-loaded data.
+async function load(){
+  try{
+    const [dashboard,orders,products,customers,settings]=await Promise.all([
+      api('getDashboard'),api('getOrders'),api('getProducts'),api('getCustomers'),api('adminGetSettings')
+    ]);
+    DASH=dashboard;ORD=Array.isArray(orders.orders)?orders.orders:[];PRO=Array.isArray(products.products)?products.products:[];CUS=Array.isArray(customers.customers)?customers.customers:[];SET=settings.settings||{};
+    $('upd').textContent='Updated '+new Date().toLocaleTimeString('en-NG',{hour:'2-digit',minute:'2-digit'});
+    brand();renderAll();return true;
+  }catch(error){toast(error.message,true);return false}
+}
+// Apply brand accents only when the colour is a valid six-digit hex value.
+function brand(){
+  const colour=String(SET.brand_color||'');if(/^#[0-9a-f]{6}$/i.test(colour))document.documentElement.style.setProperty('--acc',colour);
+  $('sname').textContent=SET.store_name||'Store';document.title=(SET.store_name||'Store')+' — Admin';
+  const logoUrl=secureImageUrl(SET.logo_url);
+  $('logo').innerHTML=logoUrl?`<img src="${esc(logoUrl)}" alt="">`:esc((SET.store_name||'S').slice(0,1));
+}
+// Refresh all visual panels from the last successful server response.
+function renderAll(){renderOv();renderOrders();renderProds();renderCust();renderSet()}
+
+/* ===== OVERVIEW ===== */
+// Return the current Lagos calendar date as YYYY-MM-DD (not the device's UTC date).
+function lagosDate(date){
+  const parts=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Lagos',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(date);
+  const values={};parts.forEach(part=>values[part.type]=part.value);return values.year+'-'+values.month+'-'+values.day;
+}
+// Calculate date labels by calendar days so midnight in Nigeria never shifts the chart.
+function lagosDayOffset(offset){
+  const current=lagosDate(new Date()).split('-').map(Number);
+  return new Date(Date.UTC(current[0],current[1]-1,current[2]+offset)).toISOString().slice(0,10);
+}
+// Draw KPIs, the seven-day paid-sales chart and low-stock alerts.
+function renderOv(){
+  const alerts=Array.isArray(DASH.stockAlerts)?DASH.stockAlerts:[];
+  $('k1').textContent=money(DASH.salesToday);$('k2').textContent=Number(DASH.ordersToday||0);$('k3').textContent=Number(DASH.pendingCount||0);$('k4').textContent=alerts.length;$('bo').textContent=Number(DASH.pendingCount||0);
+  const days=[],sums={};for(let i=-6;i<=0;i++)days.push(lagosDayOffset(i));
+  ORD.forEach(order=>{if(order.status==='Paid'){const day=String(order.paid_at||'').slice(0,10);sums[day]=(sums[day]||0)+Number(order.total||0)}});
+  const max=Math.max(1,...days.map(day=>sums[day]||0));
+  $('bars').innerHTML=days.map(day=>`<div class="bar"><span class="mono">${esc(money(sums[day]||0))}</span><i style="height:${Math.max(2,(sums[day]||0)/max*100)}%"></i>${day.slice(8)}</div>`).join('');
+  $('alerts').innerHTML=alerts.length?alerts.map(item=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)"><span>${esc(item.name)} <span class="sm">· ${Number(item.stock)} left</span></span>${pill(item.status)}</div>`).join(''):'<div class="empty">All products are well stocked ✓</div>';
+}
+
+/* ===== ORDERS ===== */
+// Apply search and status filters without mutating the server's order list.
+function filtOrders(){return ORD.filter(order=>(os==='all'||order.status===os)&&(!oq||[order.order_id,order.customer_name,order.customer_phone,order.customer_email].join(' ').toLowerCase().includes(oq)))}
+// Render the current page and clamp its index when a filter removes rows.
+function renderOrders(){
+  const filtered=filtOrders(),pages=Math.max(1,Math.ceil(filtered.length/SIZE));op=Math.min(Math.max(1,op),pages);
+  const offset=(op-1)*SIZE,page=filtered.slice(offset,offset+SIZE);
+  $('ot').innerHTML=page.length?page.map(order=>{
+    const items=Array.isArray(order.items)?order.items:[];const summary=items.map(item=>Number(item.qty)+'× '+String(item.name||'')).join(', ');
+    const actions=order.status==='Pending'?`<button class="ra go" data-action="pay" data-id="${esc(order.order_id)}">Confirm payment</button><button class="ra d" data-action="cancel" data-id="${esc(order.order_id)}">Cancel</button>`:`<button class="ra" data-action="view-order" data-id="${esc(order.order_id)}">View</button>`;
+    return `<tr><td class="mono sm">${esc(order.order_id)}</td><td><b style="font-weight:500">${esc(order.customer_name)}</b><div class="sm">${esc(order.customer_phone)}</div></td><td class="hm"><div class="ell" title="${esc(summary)}">${esc(summary)}</div></td><td class="mono">${money(order.total)}</td><td class="hm sm">${esc(String(order.created_at||'').slice(0,16))}</td><td>${pill(order.status)}</td><td>${actions}</td></tr>`;
+  }).join(''):'<tr><td colspan="7" class="empty">No orders match</td></tr>';
+  $('oi').textContent=filtered.length?`Showing ${offset+1}–${Math.min(offset+SIZE,filtered.length)} of ${filtered.length}`:'0 orders';
+  $('opg').innerHTML=pages>1?Array.from({length:pages},(_,index)=>`<button class="${index+1===op?'on':''}" data-action="page" data-page="${index+1}">${index+1}</button>`).join(''):'';
+}
+// Build a safely escaped order summary for the payment and detail modals.
+function orderBox(order){
+  const items=Array.isArray(order.items)?order.items:[];
+  return `<p class="sm" style="margin-bottom:12px"><span class="mono" style="color:var(--acc)">${esc(order.order_id)}</span> · ${esc(order.customer_name)}<br>${esc(order.customer_phone)} · ${esc(order.customer_email)}<br>${esc(order.customer_address)}</p>`+
+    items.map(item=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)"><span>${Number(item.qty)}× ${esc(item.name)}</span><span class="mono">${money(Number(item.price)*Number(item.qty))}</span></div>`).join('')+
+    `<div style="display:flex;justify-content:space-between;padding:10px 0;font-weight:700"><span>Total</span><span class="mono">${money(order.total)}</span></div>`;
+}
+// Open the payment confirmation screen for a selected pending order.
+function orderEmailRetryBox(order){
+  const needsRetry=order.order_customer_email_sent!=='yes'||order.order_owner_email_sent!=='yes';
+  return needsRetry?'<div class="warn">One or both order notification emails are not confirmed as sent. <button class="ra" id="oer" onclick="retryOrderEmails()">Retry order emails</button></div>':'';
+}
+// Open the payment confirmation screen and expose a retry for failed order notifications.
+function openPay(id){
+  cur=ORD.find(order=>String(order.order_id)===String(id));if(!cur)return toast('Order not found. Refresh the dashboard.',true);
+  modal(`<h3 class="sy">Confirm payment</h3><p class="sm" style="margin-bottom:10px">This deducts stock once and then sends the customer's receipt.</p>${orderBox(cur)}${orderEmailRetryBox(cur)}<div id="pw"></div><div class="acts"><button class="btn o" onclick="closeM()">Cancel</button><button class="btn g" id="pb2" onclick="confirmPay(false)">Confirm payment</button></div>`);
+}
+// Confirm payment and explain separately whether the customer receipt email was accepted.
+async function confirmPay(force){
+  const button=$('pb2');button.disabled=true;button.textContent='Working…';
+  try{
+    const result=await api('markPaid',{orderId:cur.order_id,force:force===true});closeM();
+    toast(result.receiptSent?'Payment confirmed. Receipt sent ✓':(result.receiptInProgress?'Payment confirmed. Receipt email is being sent; refresh shortly.':'Payment confirmed, but the receipt email failed. Open the order and retry it.'),!result.receiptSent&&!result.receiptInProgress);
+    await load();
+  }catch(error){
+    button.disabled=false;
+    if(error.data&&error.data.error==='low_stock'){
+      $('pw').innerHTML='<div class="warn"><b>Not enough stock:</b><br>'+error.data.shortages.map(item=>`${esc(item.name)}: needs ${Number(item.needed)}, only ${Number(item.have)} left`).join('<br>')+'</div>';
+      button.textContent='Confirm anyway';button.onclick=()=>confirmPay(true);
+    }else{button.textContent='Confirm payment';toast(error.message,true)}
+  }
+}
+// Open read-only order details and show a receipt retry button only when needed.
+function openView(id){
+  cur=ORD.find(order=>String(order.order_id)===String(id));if(!cur)return toast('Order not found. Refresh the dashboard.',true);
+  const receipt=cur.status==='Paid'&&cur.payment_email_sent!=='yes'?'<div class="warn">The payment receipt has not been confirmed as sent.</div><button class="btn" id="rr" onclick="retryReceipt()">Retry receipt email</button>':'';
+  const undo=cur.status==='Paid'&&(!cur.payment_state||cur.payment_state==='COMPLETE')?'<button class="btn o" style="color:var(--t)" data-action="undo-payment" data-id="'+esc(cur.order_id)+'">Undo payment</button>':'';
+  modal(`<h3 class="sy">Order details</h3>${orderBox(cur)}${orderEmailRetryBox(cur)}<p class="sm">Status: ${pill(cur.status)}${cur.paid_at?' · Paid '+esc(cur.paid_at):''}</p>${receipt}<div class="acts">${undo}<button class="btn o" onclick="closeM()">Close</button></div>`);
+}
+// Retry the customer and owner order notifications without creating or changing an order.
+async function retryOrderEmails(){
+  const button=$('oer');if(button){button.disabled=true;button.textContent='Sending…'}
+  try{
+    const result=await api('retryOrderEmails',{orderId:cur.order_id});
+    await load();
+    const allSent=result.customerEmailSent&&result.ownerEmailSent;
+    const working=result.customerEmailInProgress||result.ownerEmailInProgress;
+    toast(allSent?'Order notification emails sent ✓':working?'One or more emails are already being sent. Refresh shortly.':'One or more emails still failed. Check the mail quota and retry.',!allSent&&!working);
+    closeM();
+  }catch(error){if(button){button.disabled=false;button.textContent='Retry order emails'}toast(error.message,true)}
+}
+// Retry a failed payment receipt without changing order status or stock.
+async function retryReceipt(){
+  const button=$('rr');if(button){button.disabled=true;button.textContent='Sending…'}
+  try{const result=await api('retryReceipt',{orderId:cur.order_id});closeM();toast(result.receiptSent?'Receipt email sent ✓':(result.receiptInProgress?'Receipt email is already being sent. Refresh shortly.':'The email could not be sent. Check the Gmail quota and try again.'),!result.receiptSent&&!result.receiptInProgress);await load()}
+  catch(error){if(button){button.disabled=false;button.textContent='Retry receipt email'}toast(error.message,true)}
+}
+// Cancel only pending orders; the backend uses the same lock as payment confirmation.
+async function cancelOrd(id){if(!confirm('Cancel this order?'))return;try{await api('cancelOrder',{orderId:id});toast('Order cancelled');await load()}catch(error){toast(error.message,true)}}
+
+// Put a wrongly confirmed payment back to Pending; the backend returns the stock using a recoverable journal.
+async function revertPay(id){
+  if(!confirm('Undo this payment? Stock goes back on the shelf and the order returns to Pending. The customer ALREADY received a receipt email, so tell them on WhatsApp.'))return;
+  try{await api('revertPaid',{orderId:id});closeM();toast('Payment undone. The order is Pending again.');await load()}catch(error){toast(error.message,true)}
+}
+
+/* ===== PRODUCTS ===== */
+// Render the product table with server-provided IDs stored in data attributes, not inline JavaScript strings.
+function renderProds(){
+  $('pt').innerHTML=PRO.length?PRO.map(product=>`<tr><td>${product.images&&secureImageUrl(product.images[0])?`<img class="thumb" src="${esc(secureImageUrl(product.images[0]))}" alt="">`:'<div class="thumb"></div>'}</td><td><b style="font-weight:500">${esc(product.name)}</b></td><td class="hm sm">${esc(product.category)}</td><td class="mono">${money(product.price)}</td><td class="mono">${Number(product.stock)}</td><td>${pill(product.status)}</td><td><button class="ra" data-action="edit-product" data-id="${esc(product.id)}">Edit</button><button class="ra d" data-action="delete-product" data-id="${esc(product.id)}">Delete</button></td></tr>`).join(''):'<tr><td colspan="7" class="empty">No products yet. Add your first one.</td></tr>';
+}
+// Generate a new stable request ID when a new-product form opens.
+function newProductRequestId(){return (window.crypto&&window.crypto.randomUUID)?window.crypto.randomUUID():'req_'+Date.now()+'_'+Math.random().toString(36).slice(2)}
+// Use a compact stable fingerprint to retrieve the same save key after a timeout or page refresh.
+function productFingerprintKey(value){let hash=2166136261;for(let index=0;index<value.length;index++){hash^=value.charCodeAt(index);hash=Math.imul(hash,16777619)}return 'store_product_request_'+(hash>>>0).toString(16)}
+// Open the add/edit product form and preserve the current images.
+function editProd(id){
+  const product=PRO.find(item=>String(item.id)===String(id))||{images:[],status:'In Stock',status_locked:'no'};
+  editingProductId=product.id||'';productCreateRequestId='';LOADED_STOCK=product.id?Number(product.stock):undefined;IMG=Array.isArray(product.images)?[...product.images]:[];
+  const categories=[...new Set((SET.categories||'General').split(',').map(value=>value.trim()).filter(Boolean))];
+  if(product.category&&!categories.includes(product.category))categories.push(product.category);
+  modal(`<h3 class="sy" style="margin-bottom:16px">${editingProductId?'Edit':'Add'} product</h3>
+  <label class="fl" for="pn">Name</label><input class="in" id="pn" maxlength="120" value="${esc(product.name||'')}" required>
+  <div class="row2"><div><label class="fl" for="pp">Price (whole naira, at least 1)</label><input class="in" id="pp" type="number" min="1" step="1" value="${Number.isFinite(Number(product.price))?Number(product.price):''}" required></div><div><label class="fl" for="ps">Stock count</label><input class="in" id="ps" type="number" min="0" step="1" value="${Number(product.stock)||0}" required></div></div>
+  <div class="row2"><div><label class="fl" for="pcmp">Original price (optional, for a sale)</label><input class="in" id="pcmp" type="number" min="0" step="1" value="${Number(product.compare_at_price)>0?Number(product.compare_at_price):''}" placeholder="Leave blank for no sale"></div><div><label class="fl" for="pfe">Homepage</label><label style="display:flex;gap:8px;align-items:center;font-size:.84rem;padding:9px 0"><input type="checkbox" id="pfe" ${product.featured==='yes'?'checked':''}> Feature on homepage</label></div></div>
+  <label class="fl" for="pcat">Category</label><select class="in" id="pcat">${categories.map(category=>`<option value="${esc(category)}"${category===product.category?' selected':''}>${esc(category)}</option>`).join('')}</select>
+  <label class="fl" for="pd">Description</label><textarea class="in" id="pd" maxlength="2000">${esc(product.description||'')}</textarea>
+  <label class="fl">Images (first one is the cover; maximum 8 images)</label><div class="imgs" id="im"></div>
+  <input type="file" id="pf" accept="image/jpeg,image/png,image/webp" multiple style="margin-bottom:14px;font-size:.8rem">
+  <label style="display:flex;gap:8px;align-items:center;font-size:.84rem;margin-bottom:10px"><input type="checkbox" id="pl" ${product.status_locked==='yes'?'checked':''}> Set status manually (otherwise it follows stock)</label>
+  <select class="in" id="pst" ${product.status_locked==='yes'?'':'disabled'}>${['In Stock','Few Left','Out of Stock'].map(status=>`<option${status===product.status?' selected':''}>${status}</option>`).join('')}</select>
+  <div class="acts"><button class="btn o" onclick="closeM()">Cancel</button><button class="btn" id="psb" onclick="saveProd()">Save product</button></div>`);
+  $('pl').onchange=()=>{$('pst').disabled=!$('pl').checked};
+  $('pf').onchange=event=>upl(event.target.files);
+  drawImgs();
+}
+// Draw upload previews and safe remove controls.
+function drawImgs(){$('im').innerHTML=IMG.map((url,index)=>`<div><img src="${esc(secureImageUrl(url))}" alt="Product image ${index+1}"><button type="button" data-action="remove-image" data-index="${index}" aria-label="Remove image">×</button></div>`).join('')}
+// Validate each image before sending it to the public Cloudinary preset.
+async function upl(files){
+  const button=$('psb');if(!files||!files.length)return;
+  button.disabled=true;button.textContent='Uploading…';
+  try{
+    for(const file of Array.from(files)){
+      if(IMG.length>=8)throw new Error('A product can have no more than 8 images.');
+      if(!['image/jpeg','image/png','image/webp'].includes(file.type))throw new Error('Use a JPG, PNG or WebP image.');
+      if(file.size>5*1024*1024)throw new Error('Each image must be 5 MB or smaller.');
+      const form=new FormData();form.append('file',file);form.append('upload_preset',PRESET);
+      const response=await fetch(`https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,{method:'POST',body:form});
+      const result=await response.json();
+      if(!response.ok||!result.secure_url||!/^https:\/\//i.test(result.secure_url))throw new Error(result.error&&result.error.message||'Image upload failed.');
+      IMG.push(result.secure_url);drawImgs();
+    }
+  }catch(error){toast(error.message,true)}
+  finally{button.disabled=false;button.textContent='Save product';if($('pf'))$('pf').value=''}
+}
+// Send clean product fields to the server; the server repeats every important check.
+async function saveProd(){
+  const button=$('psb');const price=$('pp').value,stock=$('ps').value;
+  if(!String($('pn').value).trim()||price===''||stock===''||!Number.isSafeInteger(Number(price))||!Number.isSafeInteger(Number(stock))||Number(price)<1||Number(stock)<0){toast('Enter a product name, a whole-naira price of at least 1 and a whole-number stock.',true);return}
+  const compare=$('pcmp').value;if(compare!==''&&(!Number.isSafeInteger(Number(compare))||Number(compare)<0||(Number(compare)>0&&Number(compare)<=Number(price)))){toast('Original price must be higher than the selling price, or left blank.',true);return}
+  const product={id:editingProductId,name:$('pn').value,price,stock,category:$('pcat').value,description:$('pd').value,images:IMG,status_locked:$('pl').checked,status:$('pst').value,compare_at_price:compare===''?0:Number(compare),featured:$('pfe').checked};
+  if(editingProductId&&LOADED_STOCK!==undefined)product.stock_loaded=LOADED_STOCK;
+  // A lost response can be retried with the same key, even after this modal or page is reopened.
+  const fingerprint=JSON.stringify(product);const storageKey=productFingerprintKey(fingerprint);
+  if(!editingProductId){
+    try{productCreateRequestId=sessionStorage.getItem(storageKey)||''}catch(error){}
+    if(!productCreateRequestId)productCreateRequestId=newProductRequestId();
+    try{sessionStorage.setItem(storageKey,productCreateRequestId)}catch(error){}
+    product.request_id=productCreateRequestId;
+  }
+  button.disabled=true;button.textContent='Saving…';
+  try{
+    await api('saveProduct',{product});
+    if(!editingProductId)try{sessionStorage.removeItem(storageKey)}catch(error){}
+    closeM();toast('Product saved ✓');await load();
+  }catch(error){toast(error.message,true);button.disabled=false;button.textContent='Save product'}
+}
+// Confirm product deletion; the backend will refuse deletion while a pending order needs it.
+async function delProd(id){if(!confirm('Delete this product? Past orders keep their item snapshots.'))return;try{await api('deleteProduct',{id});toast('Product deleted');await load()}catch(error){toast(error.message,true)}}
+
+/* ===== CUSTOMERS ===== */
+// Search customers by name/email and show consent, order count and lifetime paid spend.
+function renderCust(){
+  const query=($('cs').value||'').toLowerCase();
+  const filtered=CUS.filter(customer=>!query||(String(customer.name)+' '+String(customer.email)).toLowerCase().includes(query));
+  $('ct').innerHTML=filtered.length?filtered.map(customer=>`<tr><td><b style="font-weight:500">${esc(customer.name)}</b><div class="sm">${esc(customer.email)}${customer.tags?' · '+esc(customer.tags):''}</div></td><td class="hm sm">${esc(customer.phone)}</td><td>${Number(customer.total_orders)||0}</td><td class="mono">${money(customer.total_spent)}</td><td>${customer.newsletter_opt_in==='yes'?'<span class="pill s-g">Subscribed</span>':'<span class="pill s-a">No</span>'}</td><td><button class="ra" data-action="edit-customer" data-email="${esc(customer.email)}">Notes</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">No customers yet</td></tr>';
+}
+// Open the private notes/tags editor for one customer.
+function editCust(email){
+  const customer=CUS.find(item=>item.email===email);if(!customer)return;
+  editingCustomerEmail=customer.email;
+  modal(`<h3 class="sy">${esc(customer.name)}</h3><p class="sm" style="margin-bottom:14px">${esc(customer.email)} · ${esc(customer.phone)}<br>${esc(customer.address)}<br>First order ${esc(String(customer.first_order_at).slice(0,10))} · Last ${esc(String(customer.last_order_at).slice(0,10))}</p>
+  <label class="fl" for="ctg">Tags (e.g. VIP, Wholesale)</label><input class="in" id="ctg" maxlength="200" value="${esc(customer.tags||'')}"><label class="fl" for="cn">Private notes</label><textarea class="in" id="cn" maxlength="1000">${esc(customer.notes||'')}</textarea>
+  <div class="acts"><button class="btn o" onclick="closeM()">Cancel</button><button class="btn" onclick="saveCust()">Save</button></div>`);
+}
+// Save only owner notes and tags; customer purchasing totals are rebuilt by the backend.
+async function saveCust(){try{await api('updateCustomer',{email:editingCustomerEmail,tags:$('ctg').value,notes:$('cn').value});closeM();toast('Saved ✓');await load()}catch(error){toast(error.message,true)}}
+// Escape spreadsheet formula prefixes before exporting customer-controlled values to CSV.
+function csvValue(value){let text=String(value==null?'':value);if(/^[\u0000-\u0020]*[=+\-@]/.test(text))text="'"+text;return '"'+text.replace(/"/g,'""')+'"'}
+// Download only customers who explicitly opted in to the newsletter.
+function exportSubs(){
+  const rows=CUS.filter(customer=>customer.newsletter_opt_in==='yes');if(!rows.length)return toast('No subscribers yet',true);
+  const csv='Name,Email,Subscribed on\n'+rows.map(customer=>[customer.name,customer.email,customer.newsletter_date].map(csvValue).join(',')).join('\n');
+  const url=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download='subscribers.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+
+/* ===== SETTINGS ===== */
+// These are the settings the owner is allowed to edit; the admin token hash is never included.
+const FIELDS=[
+  ['store_name','Store name','text'],['owner_email','Owner email (alerts & daily summary)','email'],
+  ['whatsapp_number','WhatsApp number (e.g. 2348012345678; 0801… is converted for you)','tel'],['currency_symbol','Currency symbol','text'],
+  ['brand_color','Brand colour (six-digit hex)','text'],['logo_url','Logo URL (HTTPS)','url'],
+  ['banner_text','Storefront banner text','text'],['categories','Categories (comma separated)','text'],
+  ['low_stock_threshold','"Few Left" at or below','number'],['dashboard_url','Dashboard link (HTTPS)','url'],
+  ['tagline','Tagline (under store name)','text'],['about_title','About page heading','text'],
+  ['about_text','About page text (your brand story)','textarea'],['contact_phone','Public phone number','tel'],
+  ['contact_email','Public contact email','email'],['contact_address','Shop address','text'],
+  ['opening_hours','Opening hours','text'],['instagram_url','Instagram link (HTTPS)','url']
+];
+// Build the settings form from current database values.
+function renderSet(){
+  $('sf').innerHTML=FIELDS.map(([key,label,type])=>{
+    const value=esc(SET[key]||'');
+    if(type==='textarea')return `<label class="fl" for="f-${key}">${label}</label><textarea class="in" rows="5" data-k="${key}" id="f-${key}">${value}</textarea>`;
+    const extra=type==='number'?' min="0" step="1"':'';
+    return `<label class="fl" for="f-${key}">${label}</label><input class="in" type="${type}" data-k="${key}" id="f-${key}" value="${value}"${extra}>`;
+  }).join('');
+}
+// Save the submitted settings; server-side validation protects the live storefront.
+async function saveSet(){
+  const values={};document.querySelectorAll('#sf [data-k]').forEach(input=>values[input.dataset.k]=input.value);
+  try{await api('saveSettings',{settings:values});toast('Settings saved ✓');await load()}catch(error){toast(error.message,true)}
+}
+
+/* ===== MODAL AND EVENTS ===== */
+// Show a modal with supplied safe HTML.
+function modal(html){const box=$('md');box.innerHTML=html;box.setAttribute('role','dialog');box.setAttribute('aria-modal','true');$('mb').classList.add('on');const first=box.querySelector('input,select,textarea,button');if(first)first.focus()}
+// Close the modal without changing stored data.
+function closeM(){$('mb').classList.remove('on')}
+// Escape closes the modal.
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeM()});
+// Close a modal when the dimmed backdrop itself is clicked.
+$('mb').addEventListener('click',event=>{if(event.target===$('mb'))closeM()});
+// Switch dashboard tabs.
+document.querySelectorAll('.tab').forEach(button=>button.onclick=()=>{document.querySelectorAll('.tab,.panel').forEach(node=>node.classList.remove('on'));button.classList.add('on');$('p-'+button.dataset.t).classList.add('on')});
+// Filter orders by status.
+document.querySelectorAll('#oc .chip').forEach(chip=>chip.onclick=()=>{document.querySelectorAll('#oc .chip').forEach(node=>node.classList.remove('on'));chip.classList.add('on');os=chip.dataset.s;op=1;renderOrders()});
+// Search orders and customers as the owner types.
+$('os').oninput=event=>{oq=event.target.value.toLowerCase();op=1;renderOrders()};$('cs').oninput=renderCust;
+// Route all dynamic controls through data attributes; no customer text is executed as JavaScript.
+document.addEventListener('click',event=>{
+  const control=event.target.closest('[data-action]');if(!control)return;
+  const action=control.dataset.action;
+  if(action==='pay')openPay(control.dataset.id);
+  else if(action==='view-order')openView(control.dataset.id);
+  else if(action==='cancel')cancelOrd(control.dataset.id);
+  else if(action==='undo-payment')revertPay(control.dataset.id);
+  else if(action==='page'){op=Number(control.dataset.page)||1;renderOrders()}
+  else if(action==='edit-product')editProd(control.dataset.id);
+  else if(action==='delete-product')delProd(control.dataset.id);
+  else if(action==='edit-customer')editCust(control.dataset.email);
+  else if(action==='remove-image'){const index=Number(control.dataset.index);if(Number.isInteger(index)&&index>=0&&index<IMG.length){IMG.splice(index,1);drawImgs()}}
+});
+// Reuse a tab-scoped session; cache eviction or token changes return the owner to login.
+try{S=sessionStorage.getItem('s')||''}catch(error){}
+if(S)start();
+</script></body></html>

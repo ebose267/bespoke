@@ -1,0 +1,167 @@
+{
+  "total": 40,
+  "passed": 40,
+  "failed": 0,
+  "results": [
+    {
+      "name": "setup creates four tabs and appends new columns without moving legacy order data",
+      "status": "PASS"
+    },
+    {
+      "name": "login issues valid session and token change revokes old session",
+      "status": "PASS"
+    },
+    {
+      "name": "five bad token attempts throttle further guesses but do not lock out the rightful owner",
+      "status": "PASS"
+    },
+    {
+      "name": "public GET allow-list hides owner email and token hash",
+      "status": "PASS"
+    },
+    {
+      "name": "valid product saves with derived Few Left status",
+      "status": "PASS"
+    },
+    {
+      "name": "product price decimals, negative stock and unsafe image links are rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "creating a product is idempotent when the browser retries after a lost response",
+      "status": "PASS"
+    },
+    {
+      "name": "manual status cannot claim In Stock when the stock count is zero",
+      "status": "PASS"
+    },
+    {
+      "name": "checkout rejects punctuation-only phone numbers",
+      "status": "PASS"
+    },
+    {
+      "name": "manual product status stays locked when stock changes",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate product lines are aggregated before stock validation",
+      "status": "PASS"
+    },
+    {
+      "name": "placeOrder stores pending order, CRM opt-in and sends two notifications",
+      "status": "PASS"
+    },
+    {
+      "name": "same request ID returns existing order without duplicate CRM count or emails",
+      "status": "PASS"
+    },
+    {
+      "name": "order is saved when email quota is exhausted, and the owner can retry both notifications safely",
+      "status": "PASS"
+    },
+    {
+      "name": "markPaid deducts exact stock once and recomputes CRM spend",
+      "status": "PASS"
+    },
+    {
+      "name": "manual status lock cannot keep a zero-stock product looking available",
+      "status": "PASS"
+    },
+    {
+      "name": "oversubscribed pending orders trigger low-stock warning then explicit force",
+      "status": "PASS"
+    },
+    {
+      "name": "pending order cancellation is allowed, and paid order cancellation is refused",
+      "status": "PASS"
+    },
+    {
+      "name": "product deletion is blocked while a pending order still references it",
+      "status": "PASS"
+    },
+    {
+      "name": "paid order snapshots remain readable after its product is deleted",
+      "status": "PASS"
+    },
+    {
+      "name": "prepared payment recovery reapplies absolute stock targets and does not double count",
+      "status": "PASS"
+    },
+    {
+      "name": "receipt email failure is reported and can be retried without stock changes",
+      "status": "PASS"
+    },
+    {
+      "name": "settings reject protected keys and invalid configuration",
+      "status": "PASS"
+    },
+    {
+      "name": "formula-like customer and product text is escaped before entering Google Sheets",
+      "status": "PASS"
+    },
+    {
+      "name": "dashboard, orders, products and customers endpoints return consistent CRM data",
+      "status": "PASS"
+    },
+    {
+      "name": "daily summary sends owner email and includes stock table",
+      "status": "PASS"
+    },
+    {
+      "name": "API rejects inherited object properties as route names",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: wrong token is slowed outside any lock, and the right token still works",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: stale edit form cannot overwrite live stock",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: price must be at least 1 and original price must be higher than price",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: created_at is set once by the backend and survives edits",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: backfillProductDates stamps only products that have no date",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: a +234 phone is stored untouched and an identical retry returns the same order",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: WhatsApp numbers saved in local format are normalised on save, on read and on migration",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: undo payment restores stock once, resets the order and survives an interruption",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: undo after a forced shortage restores only what was actually deducted",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: best sellers rank paid units only and expose no customer data",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: public payload is cached without a lock and cleared by product, settings and delete writes",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: one damaged order row cannot break the dashboard orders list",
+      "status": "PASS"
+    },
+    {
+      "name": "v3: daily summary reports the day that just ended when it runs just after midnight",
+      "status": "PASS"
+    }
+  ]
+}

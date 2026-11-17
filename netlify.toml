@@ -1,0 +1,7 @@
+# STOREFRONT site. (The owner dashboard is a second Netlify site: build command "npm run build:admin", publish "dist/admin".)
+[build]
+  command = "npm run build"
+  publish = "dist/store"
+
+[build.environment]
+  NODE_VERSION = "20"
