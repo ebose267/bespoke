@@ -1,30 +1,20 @@
 {
   "name": "thimble-storefront-base",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "private": true,
   "type": "module",
-  "description": "Thimble bespoke e-commerce storefront: protected core logic + re-themeable React UI, Apps Script backend, owner dashboard.",
+  "description": "Three-file bespoke e-commerce storefront (index.html), owner dashboard (admin.html), and Google Apps Script backend (thecode.gs).",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host 0.0.0.0 --port 3000",
     "build": "vite build",
     "preview": "vite preview",
     "test": "npm run test:backend && npm run test:frontend",
-    "test:backend": "node backend/test_backend.js 2>/dev/null",
-    "test:frontend": "vitest run",
-    "build:admin": "node scripts/build-admin.mjs",
-    "build:preview": "node scripts/build-preview.mjs",
-    "build:client": "npm run build && npm run build:admin"
+    "test:backend": "node tests/backend.test.js",
+    "test:frontend": "vitest run"
   },
-  "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.1.0",
-    "@testing-library/user-event": "^14.5.2",
-    "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^25.0.1",
     "vite": "^5.4.11",
     "vitest": "^2.1.8"

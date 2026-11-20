@@ -1,0 +1,2492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#0d1008;
+      --bg:#f5f2eb;
+      --card:#ffffff;
+      --bd:#e4dfd4;
+      --mut:#686052;
+      --m2:#8d8576;
+      --acc:#c8860a;
+      --accp:color-mix(in srgb,var(--acc) 12%,#fff);
+      --g:#2f6f23;
+      --gp:#eaf5e6;
+      --t:#b93f14;
+      --tp:#fdeee8;
+      --go:#9b6210;
+      --gop:#fdf3e0;
+      --r:14px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:15px}
+    body{
+      background:var(--bg);
+      color:var(--ink);
+      font-family:'Instrument Sans',sans-serif;
+      min-height:100vh;
+      line-height:1.5;
+      background-image:linear-gradient(rgba(200,134,10,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(200,134,10,.04) 1px,transparent 1px);
+      background-size:48px 48px;
+    }
+    h1,h2,h3,.sy{font-family:'Syne',sans-serif}
+    .mono{font-family:'DM Mono',monospace}
+    button{font-family:inherit;cursor:pointer}
+    a{color:inherit}
+    :focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+    .hide{display:none!important}
+    .shell{max-width:1240px;margin:0 auto;padding:0 20px 72px}
+    .top{display:flex;align-items:center;justify-content:space-between;padding:20px 0 0;flex-wrap:wrap;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .dot{width:38px;height:38px;border-radius:10px;background:var(--acc);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;overflow:hidden;flex-shrink:0}
+    .dot img{width:100%;height:100%;object-fit:cover}
+    .brand h1{font-size:1.15rem;font-weight:800;letter-spacing:-.02em}
+    .brand small{display:block;font-size:.72rem;color:var(--mut);letter-spacing:.08em;text-transform:uppercase;margin-top:-2px}
+    .tr{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+    .upd{font-size:.72rem;color:var(--m2)}
+    .pb{min-height:40px;padding:8px 14px;background:var(--card);border:1px solid var(--bd);border-radius:50px;font-size:.78rem;font-weight:500;color:var(--mut);transition:.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+    .pb:hover{border-color:var(--acc);color:var(--acc)}
+    nav{display:flex;border-bottom:1px solid var(--bd);margin-top:20px;overflow-x:auto;scrollbar-width:none;gap:2px}
+    .tab{min-height:44px;padding:10px 18px;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;background:none;font-size:.84rem;font-weight:500;color:var(--mut);white-space:nowrap}
+    .tab.on{color:var(--acc);border-color:var(--acc);font-weight:600}
+    .bd{background:var(--accp);color:var(--acc);font-size:.66rem;font-weight:700;padding:1px 7px;border-radius:50px;margin-left:6px}
+    .panel{display:none;padding-top:24px}
+    .panel.on{display:block}
+    .card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:20px}
+    .pad{padding:22px}
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+    .kpi{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px 22px;position:relative;overflow:hidden}
+    .kpi:after{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--c,var(--acc))}
+    .kl{font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+    .kv{font-size:1.7rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+    .ct{font-size:.98rem;font-weight:700}
+    .cs{font-size:.78rem;color:var(--mut);margin-top:2px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .grid-hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:20px;align-items:start}
+    .bars{display:flex;align-items:flex-end;gap:10px;height:150px;margin-top:16px}
+    .bar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:6px;font-size:.68rem;color:var(--mut)}
+    .bar i{display:block;width:100%;background:var(--accp);border:2px solid var(--acc);border-radius:6px;min-height:3px}
+    .tb{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--bd);flex-wrap:wrap;gap:10px}
+    .tb-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    .search{background:var(--bg);border:1px solid var(--bd);border-radius:50px;padding:8px 14px;font:inherit;font-size:.82rem;outline:0;width:220px;min-height:40px}
+    .search:focus{border-color:var(--acc)}
+    .chips{display:flex;gap:6px;flex-wrap:wrap}
+    .chip{min-height:36px;padding:4px 12px;border:1px solid var(--bd);border-radius:50px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);background:var(--card)}
+    .chip.on,.chip:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse}
+    th{padding:10px 16px;text-align:left;font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap}
+    td{padding:12px 16px;border-bottom:1px solid var(--bd);font-size:.85rem;vertical-align:middle}
+    tr:last-child td{border-bottom:0}
+    tbody tr:hover{background:var(--bg)}
+    .sm{font-size:.76rem;color:var(--mut)}
+    .ell{max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.78rem;color:var(--mut)}
+    .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:50px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}
+    .pill:before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.7}
+    .s-g{background:var(--gp);color:var(--g)}
+    .s-a{background:var(--gop);color:var(--go)}
+    .s-r{background:var(--tp);color:var(--t)}
+    .ra{min-height:34px;background:none;border:1px solid var(--bd);border-radius:8px;padding:4px 10px;font-size:.74rem;color:var(--mut);margin:2px 4px 2px 0;transition:.18s}
+    .ra:hover{border-color:var(--acc);color:var(--acc)}
+    .ra.d:hover{border-color:var(--t);color:var(--t)}
+    .ra.go{background:var(--g);color:#fff;border-color:var(--g)}
+    .foot{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;border-top:1px solid var(--bd);flex-wrap:wrap;gap:8px}
+    .pg{display:flex;gap:4px}
+    .pg button{width:32px;height:32px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--mut);font-size:.78rem}
+    .pg .on{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .empty{text-align:center;padding:40px 20px;color:var(--m2);font-size:.9rem}
+    .thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;background:var(--bg);border:1px solid var(--bd);flex-shrink:0}
+    .btn{min-height:42px;padding:9px 20px;border:1px solid transparent;border-radius:50px;background:var(--ink);color:#fff;font-size:.84rem;font-weight:600;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+    .btn:hover{background:var(--acc)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .btn.g{background:var(--g)}
+    .btn.d{background:var(--t)}
+    .btn.o{background:var(--card);color:var(--ink);border-color:var(--bd)}
+    .btn.o:hover{border-color:var(--acc);color:var(--acc);background:var(--card)}
+    .btn.sm-b{min-height:36px;padding:6px 14px;font-size:.78rem}
+    .fl{display:block;font-size:.7rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--mut);margin:0 0 6px}
+    .in{width:100%;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:9px 12px;font:inherit;font-size:.86rem;outline:0;margin-bottom:14px;min-height:42px}
+    .in:focus{border-color:var(--acc)}
+    textarea.in{min-height:90px;resize:vertical}
+    .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .imgs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+    .imgs div{position:relative}
+    .imgs img{width:68px;height:68px;object-fit:cover;border-radius:8px;border:1px solid var(--bd)}
+    .imgs .rm-i{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border:0;border-radius:50%;background:var(--t);color:#fff;font-size:.82rem;line-height:22px;cursor:pointer}
+    .mb{position:fixed;inset:0;z-index:200;background:rgba(13,16,8,.52);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:.25s;padding:16px}
+    .mb.on{opacity:1;pointer-events:all}
+    .modal{background:var(--card);border-radius:24px;padding:28px;width:min(580px,100%);max-height:92vh;overflow-y:auto}
+    .modal.wide{width:min(940px,100%)}
+    .modal h3{font-size:1.12rem;margin-bottom:6px}
+    .acts{display:flex;gap:10px;justify-content:flex-end;margin-top:14px;flex-wrap:wrap}
+    .warn{background:var(--tp);color:var(--t);border-radius:10px;padding:10px 14px;font-size:.82rem;margin:12px 0;border:1px solid rgba(185,63,20,.2)}
+    .info-box{background:var(--gop);color:#654007;border:1px solid #ecd6a5;border-radius:10px;padding:11px 14px;font-size:.82rem;margin-bottom:16px}
+    .ok-box{background:var(--gp);color:var(--g);border:1px solid rgba(47,111,35,.2);border-radius:10px;padding:11px 14px;font-size:.82rem;margin-bottom:16px}
+    .quick-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .qcard{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+    .hero-preview-shell{background:#1b1d18;border-radius:14px;padding:14px;border:1px solid var(--bd)}
+    .hero-vp-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;justify-content:space-between;align-items:center}
+    .hero-vp-btns{display:flex;gap:6px}
+    .hero-vp-btns button{min-height:32px;padding:4px 11px;border-radius:50px;border:1px solid rgba(255,255,255,.22);background:transparent;color:#d6d2c8;font-size:.75rem;font-weight:600}
+    .hero-vp-btns button.on{background:#fff;color:#0d1008;border-color:#fff}
+    .hero-canvas-frame{margin:0 auto;border-radius:12px;overflow:hidden;position:relative;background:linear-gradient(135deg,#22261e,#394132);color:#fff;display:flex;align-items:center;border:1px solid rgba(255,255,255,.15);cursor:crosshair;transition:width .2s}
+    .hero-canvas-frame.vp-desktop{width:100%;min-height:310px}
+    .hero-canvas-frame.vp-tablet{width:min(100%,520px);min-height:270px}
+    .hero-canvas-frame.vp-mobile{width:min(100%,310px);min-height:340px}
+    .hero-canvas-frame.h-compact{min-height:220px}
+    .hero-canvas-frame.h-tall{min-height:400px}
+    .hero-canvas-img{position:absolute;inset:0;width:100%;height:100%;user-select:none;pointer-events:none}
+    .hero-canvas-scrim{position:absolute;inset:0;pointer-events:none}
+    .hero-canvas-copy{position:relative;z-index:2;padding:24px;max-width:460px;pointer-events:none}
+    .hero-canvas-copy h4{font-family:'Syne',sans-serif;font-size:1.35rem;line-height:1.15;margin:4px 0 8px}
+    .hero-canvas-copy p{font-size:.82rem;opacity:.92;margin-bottom:12px}
+    .hero-focal-dot{position:absolute;width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.55);transform:translate(-50%,-50%);z-index:3;pointer-events:none}
+    .hero-focal-dot:after{content:'';position:absolute;inset:6px;border-radius:50%;background:var(--acc)}
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;max-height:420px;overflow-y:auto;margin:12px 0}
+    .media-item{border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:var(--bg);text-align:left;padding:0;transition:.18s}
+    .media-item:hover{border-color:var(--acc);transform:translateY(-1px)}
+    .media-item img{width:100%;height:100px;object-fit:cover;display:block}
+    .media-item span{display:block;padding:6px 8px;font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dropzone{border:2px dashed var(--bd);border-radius:14px;padding:22px;text-align:center;background:var(--bg);margin-bottom:14px;transition:.18s}
+    .dropzone.drag{border-color:var(--acc);background:var(--accp)}
+    .sandbox-frame{width:100%;height:420px;border:1px solid var(--bd);border-radius:12px;background:#fff}
+    .switch{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;cursor:pointer}
+    .switch input{width:16px;height:16px;accent-color:var(--acc)}
+    #login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+    .lg{width:min(390px,100%);text-align:center}
+    #toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 22px;border-radius:50px;font-size:.84rem;z-index:300;opacity:0;transition:.3s;pointer-events:none;max-width:min(92vw,520px);text-align:center}
+    #toast.on{opacity:1}
+    #toast.err{background:var(--t)}
+    @media(max-width:980px){.kpis{grid-template-columns:1fr 1fr}.grid2,.grid-hero,.quick-strip{grid-template-columns:1fr}}
+    @media(max-width:600px){.kpis,.row2,.row3{grid-template-columns:1fr}.search{width:100%}.hm{display:none}}
+  </style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lg card pad">
+    <div class="dot" style="margin:0 auto 14px;width:48px;height:48px">🔐</div>
+    <h2 class="sy" style="margin-bottom:4px">Admin Dashboard</h2>
+    <p class="sm" style="margin-bottom:18px">Enter your access token to continue</p>
+    <input class="in" id="tok" type="password" placeholder="Access token" autocomplete="current-password">
+    <button class="btn" style="width:100%" id="lgb" type="button">Sign in</button>
+    <div class="sm" id="lge" role="alert" style="color:var(--t);margin-top:12px;min-height:18px"></div>
+  </div>
+</div>
+
+<div class="shell hide" id="app">
+  <div class="top">
+    <div class="brand">
+      <div class="dot" id="logo">S</div>
+      <div><h1 id="sname">Store</h1><small>Admin Dashboard</small></div>
+    </div>
+    <div class="tr">
+      <a class="pb" href="./index.html" target="_blank" rel="noopener">View store ↗</a>
+      <button class="pb" type="button" id="btn-clear-cache" title="Flush public storefront cache">Clear cache</button>
+      <button class="pb" type="button" id="btn-refresh">↻ Refresh</button>
+      <span class="upd mono" id="upd">—</span>
+      <button class="pb" type="button" id="btn-logout">Sign out</button>
+    </div>
+  </div>
+
+  <div id="compat-banner" class="info-box hide" style="margin-top:14px"></div>
+
+  <nav aria-label="Dashboard sections">
+    <button class="tab on" type="button" data-t="ov">Overview</button>
+    <button class="tab" type="button" data-t="or">Orders<span class="bd" id="bo">0</span></button>
+    <button class="tab" type="button" data-t="pr">Products</button>
+    <button class="tab" type="button" data-t="ca">Categories</button>
+    <button class="tab" type="button" data-t="he">Hero &amp; Nav</button>
+    <button class="tab" type="button" data-t="pg">Custom Pages</button>
+    <button class="tab" type="button" data-t="cu">Customers</button>
+    <button class="tab" type="button" data-t="se">Settings</button>
+  </nav>
+
+  <!-- OVERVIEW -->
+  <div class="panel on" id="p-ov">
+    <div class="kpis">
+      <div class="kpi" style="--c:var(--acc)"><div class="kl">Sales today</div><div class="kv mono" id="k1">—</div></div>
+      <div class="kpi" style="--c:var(--g)"><div class="kl">Orders today</div><div class="kv" id="k2">—</div></div>
+      <div class="kpi" style="--c:var(--go)"><div class="kl">Awaiting payment</div><div class="kv" id="k3">—</div></div>
+      <div class="kpi" style="--c:var(--t)"><div class="kl">Stock alerts</div><div class="kv" id="k4">—</div></div>
+    </div>
+    <div class="grid2">
+      <div class="card pad">
+        <div class="ct">Paid sales, last 7 days</div>
+        <div class="cs">Confirmed payments per day</div>
+        <div class="bars" id="bars"></div>
+      </div>
+      <div class="card pad">
+        <div class="ct">Stock alerts</div>
+        <div class="cs">Items running low or sold out</div>
+        <div id="alerts" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="quick-strip" id="quick-strip"></div>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="panel" id="p-or">
+    <div class="card">
+      <div class="tb">
+        <div class="ct">All Orders</div>
+        <div class="tb-acts">
+          <input class="search" id="os" placeholder="Search name, phone, order ID…" aria-label="Search orders">
+          <div class="chips" id="oc">
+            <button class="chip on" type="button" data-s="all">All</button>
+            <button class="chip" type="button" data-s="Pending">Pending</button>
+            <button class="chip" type="button" data-s="Paid">Paid</button>
+            <button class="chip" type="button" data-s="Cancelled">Cancelled</button>
+          </div>
+        </div>
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th>Order</th><th>Customer</th><th class="hm">Items</th><th>Total</th><th class="hm">Date</th><th>Status</th><th></th></tr></thead>
+          <tbody id="ot"></tbody>
+        </table>
+      </div>
+      <div class="foot"><span class="sm" id="oi">—</span><div class="pg" id="opg"></div></div>
+    </div>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="panel" id="p-pr">
+    <div class="card">
+      <div class="tb">
+        <div class="ct">Products</div>
+        <div class="tb-acts">
+          <input class="search" id="prs" placeholder="Search name, SKU, category…" aria-label="Search products">
+          <button class="pb" type="button" id="btn-bulk-img">Upload &amp; Assign Images</button>
+          <button class="pb" type="button" id="btn-csv-import">Bulk CSV Import</button>
+          <button class="btn" type="button" id="btn-add-prod">+ Add product</button>
+        </div>
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th></th><th>Product / SKU</th><th class="hm">Category</th><th>Price</th><th>Stock</th><th>Status</th><th></th></tr></thead>
+          <tbody id="pt"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="panel" id="p-ca">
+    <div class="card">
+      <div class="tb">
+        <div>
+          <div class="ct">Categories</div>
+          <div class="cs">Managed centrally in Google Sheets and mirrored on your storefront</div>
+        </div>
+        <button class="btn" type="button" id="btn-add-cat">+ Add category</button>
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th></th><th>Name</th><th class="hm">Slug</th><th>Sort</th><th>Status</th><th></th></tr></thead>
+          <tbody id="cat-t"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO & NAVIGATION -->
+  <div class="panel" id="p-he">
+    <div id="preset-warn" class="info-box hide"></div>
+    <div class="grid-hero">
+      <div class="card pad">
+        <div class="ct">Cloudinary Hero Image Studio</div>
+        <div class="cs" style="margin-bottom:14px">Upload, pick, crop, set focal point, and configure how your hero displays across screen sizes.</div>
+
+        <div class="tb-acts" style="margin-bottom:14px">
+          <label class="btn sm-b" style="cursor:pointer">
+            Upload Hero Image
+            <input type="file" id="hero-file" accept="image/jpeg,image/png,image/webp,image/avif" class="hide">
+          </label>
+          <button class="pb" type="button" id="btn-hero-widget">Cloudinary Crop Upload</button>
+          <button class="pb" type="button" id="btn-hero-library">Pick Existing Image</button>
+          <button class="pb" type="button" id="btn-hero-remove">Remove Image</button>
+        </div>
+
+        <label class="fl" for="h-url">Hero image URL (Cloudinary HTTPS)</label>
+        <input class="in" id="h-url" type="url" placeholder="https://res.cloudinary.com/...">
+
+        <div class="row2">
+          <div>
+            <label class="fl" for="h-alt">Alt text (accessibility)</label>
+            <input class="in" id="h-alt" maxlength="200" placeholder="Describe the hero image">
+          </div>
+          <div>
+            <label class="fl" for="h-eyebrow">Eyebrow label</label>
+            <input class="in" id="h-eyebrow" maxlength="80" placeholder="Optional small eyebrow">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label class="fl" for="h-title">Hero headline (blank = store name)</label>
+            <input class="in" id="h-title" maxlength="120">
+          </div>
+          <div>
+            <label class="fl" for="h-subtitle">Hero subtitle (blank = tagline)</label>
+            <input class="in" id="h-subtitle" maxlength="300">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label class="fl" for="h-cta-label">Primary button label</label>
+            <input class="in" id="h-cta-label" maxlength="60" placeholder="Shop now">
+          </div>
+          <div>
+            <label class="fl" for="h-cta-to">Primary button link</label>
+            <input class="in" id="h-cta-to" maxlength="200" placeholder="/shop or /page/slug">
+          </div>
+        </div>
+
+        <div class="row2">
+          <div>
+            <label class="fl" for="h-sec-label">Secondary button (optional)</label>
+            <input class="in" id="h-sec-label" maxlength="60">
+          </div>
+          <div>
+            <label class="fl" for="h-sec-to">Secondary button link</label>
+            <input class="in" id="h-sec-to" maxlength="200" placeholder="/new-arrivals">
+          </div>
+        </div>
+
+        <div class="row3">
+          <div>
+            <label class="fl" for="h-crop-mode">Cloudinary crop mode</label>
+            <select class="in" id="h-crop-mode">
+              <option value="fill">Fill frame (c_fill)</option>
+              <option value="crop">Custom region (c_crop)</option>
+              <option value="fit">Fit whole image (c_fit)</option>
+              <option value="pad">Pad frame (c_pad)</option>
+            </select>
+          </div>
+          <div>
+            <label class="fl" for="h-focal-point">Focal point preset</label>
+            <select class="in" id="h-focal-point">
+              <option value="center">Center</option>
+              <option value="custom">Custom click point</option>
+              <option value="auto">Cloudinary Smart Auto</option>
+              <option value="faces">Faces</option>
+              <option value="north">Top (north)</option>
+              <option value="south">Bottom (south)</option>
+              <option value="west">Left (west)</option>
+              <option value="east">Right (east)</option>
+            </select>
+          </div>
+          <div>
+            <label class="fl" for="h-overlay">Dark overlay (<span id="h-ov-val">45</span>%)</label>
+            <input class="in" id="h-overlay" type="range" min="0" max="85" step="1" style="padding:4px 0">
+          </div>
+        </div>
+
+        <div id="h-crop-box" class="hide" style="background:var(--bg);padding:12px;border-radius:10px;border:1px solid var(--bd);margin-bottom:14px">
+          <div class="fl" style="margin-bottom:8px">Custom Crop Window (% of source image)</div>
+          <div class="row2">
+            <div><label class="fl" for="h-cx">Start X %</label><input class="in" id="h-cx" type="number" min="0" max="95"></div>
+            <div><label class="fl" for="h-cy">Start Y %</label><input class="in" id="h-cy" type="number" min="0" max="95"></div>
+            <div><label class="fl" for="h-cw">Width %</label><input class="in" id="h-cw" type="number" min="10" max="100"></div>
+            <div><label class="fl" for="h-ch">Height %</label><input class="in" id="h-ch" type="number" min="10" max="100"></div>
+          </div>
+        </div>
+
+        <div class="row3">
+          <div>
+            <label class="fl" for="h-fx">Focal X (<span id="h-fx-val">50</span>%)</label>
+            <input class="in" id="h-fx" type="range" min="0" max="100" step="1" style="padding:4px 0">
+          </div>
+          <div>
+            <label class="fl" for="h-fy">Focal Y (<span id="h-fy-val">50</span>%)</label>
+            <input class="in" id="h-fy" type="range" min="0" max="100" step="1" style="padding:4px 0">
+          </div>
+          <div>
+            <label class="fl" for="h-zoom">Zoom (<span id="h-zoom-val">1.0</span>×)</label>
+            <input class="in" id="h-zoom" type="range" min="1" max="2.5" step="0.05" style="padding:4px 0">
+          </div>
+        </div>
+
+        <div class="fl">Responsive Screen-Size Fit &amp; Height</div>
+        <div class="row3">
+          <div>
+            <label class="sm" for="h-fit-d">Desktop fit</label>
+            <select class="in" id="h-fit-d"><option value="cover">Cover frame</option><option value="contain">Contain whole image</option></select>
+          </div>
+          <div>
+            <label class="sm" for="h-fit-t">Tablet fit</label>
+            <select class="in" id="h-fit-t"><option value="cover">Cover frame</option><option value="contain">Contain whole image</option></select>
+          </div>
+          <div>
+            <label class="sm" for="h-fit-m">Mobile fit</label>
+            <select class="in" id="h-fit-m"><option value="cover">Cover frame</option><option value="contain">Contain whole image</option></select>
+          </div>
+        </div>
+        <div class="row3">
+          <div>
+            <label class="sm" for="h-hd">Desktop height</label>
+            <select class="in" id="h-hd"><option value="compact">Compact</option><option value="standard">Standard</option><option value="tall">Tall</option></select>
+          </div>
+          <div>
+            <label class="sm" for="h-ht">Tablet height</label>
+            <select class="in" id="h-ht"><option value="compact">Compact</option><option value="standard">Standard</option><option value="tall">Tall</option></select>
+          </div>
+          <div>
+            <label class="sm" for="h-hm">Mobile height</label>
+            <select class="in" id="h-hm"><option value="compact">Compact</option><option value="standard">Standard</option><option value="tall">Tall</option></select>
+          </div>
+        </div>
+
+        <button class="btn" type="button" id="btn-save-hero">Publish Hero Settings</button>
+      </div>
+
+      <div class="card pad">
+        <div class="ct">Live Hero Preview</div>
+        <div class="cs" style="margin-bottom:12px">Click anywhere on the preview image to set the custom focal point before publishing.</div>
+        <div class="hero-preview-shell">
+          <div class="hero-vp-tabs">
+            <div class="hero-vp-btns" id="hero-vp-btns">
+              <button type="button" class="on" data-vp="desktop">Desktop</button>
+              <button type="button" data-vp="tablet">Tablet</button>
+              <button type="button" data-vp="mobile">Mobile</button>
+            </div>
+            <span class="mono sm" style="color:#d6d2c8" id="hero-vp-meta">cover · 50% 50%</span>
+          </div>
+          <div class="hero-canvas-frame vp-desktop" id="hero-preview-canvas"></div>
+        </div>
+
+        <hr style="border:0;border-top:1px solid var(--bd);margin:22px 0">
+        <div class="ct">Navigation Menu</div>
+        <div class="cs" style="margin-bottom:12px">Control built-in storefront menu items. Active Custom Pages with "Show in Nav" appear automatically.</div>
+        <div class="wrap">
+          <table>
+            <thead><tr><th>Label</th><th>Target</th><th>Order</th><th>Visible</th></tr></thead>
+            <tbody id="nav-t"></tbody>
+          </table>
+        </div>
+        <button class="btn" type="button" id="btn-save-nav" style="margin-top:14px">Save Navigation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM PAGES -->
+  <div class="panel" id="p-pg">
+    <div class="card">
+      <div class="tb">
+        <div>
+          <div class="ct">Dynamic Custom HTML Pages</div>
+          <div class="cs">Uploaded HTML files are stored in Google Drive and controlled live via Google Sheets activation status</div>
+        </div>
+        <button class="btn" type="button" id="btn-add-page">+ Upload HTML page</button>
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th>Page / Route</th><th>HTML File</th><th>Nav</th><th>Status</th><th></th></tr></thead>
+          <tbody id="pg-t"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div class="panel" id="p-cu">
+    <div class="card">
+      <div class="tb">
+        <div class="ct">Customers</div>
+        <div class="tb-acts">
+          <input class="search" id="cs" placeholder="Search name or email…" aria-label="Search customers">
+          <button class="pb" type="button" id="btn-export-subs">⬇ Subscribers CSV</button>
+        </div>
+      </div>
+      <div class="wrap">
+        <table>
+          <thead><tr><th>Customer</th><th class="hm">Phone</th><th>Orders</th><th>Spent</th><th>Newsletter</th><th></th></tr></thead>
+          <tbody id="ct"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="panel" id="p-se">
+    <div class="grid2">
+      <div class="card pad">
+        <div class="ct" style="margin-bottom:14px">Store settings</div>
+        <div id="sf"></div>
+        <button class="btn" type="button" id="btn-save-settings">Save settings</button>
+      </div>
+      <div class="card pad" style="align-self:start">
+        <div class="ct" style="margin-bottom:6px">Cloudinary Browser Setup</div>
+        <p class="sm" style="margin-bottom:14px">Configure your public Cloudinary unsigned upload preset in this browser (no API secret is ever used on the frontend).</p>
+        <label class="fl" for="cl-cloud">Cloudinary Cloud Name</label>
+        <input class="in" id="cl-cloud" readonly>
+        <label class="fl" for="cl-preset">Unsigned Upload Preset</label>
+        <input class="in" id="cl-preset" placeholder="e.g. store_unsigned_uploads">
+        <button class="btn o" type="button" id="btn-save-preset">Save Browser Upload Preset</button>
+        <p class="sm" style="margin-top:12px">Permanent default goes into <code class="mono">CLOUDINARY_PRESET</code> at the top of <code class="mono">admin.html</code>. Optional public <code class="mono">cloudinary_api_key</code> (for the official Media Library selector) can be saved in Store Settings on the left.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mb" id="mb"><div class="modal" id="md"></div></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ===== 1. CONFIG & EXTERNAL CREDENTIALS ===== */
+  // Update API_URL after deploying thecode.gs as a Google Apps Script Web App (/exec).
+  // Set CLOUDINARY_PRESET to your Cloudinary Dashboard -> Settings -> Upload -> Unsigned upload preset name.
+  // Never add a Cloudinary API Secret in frontend files.
+  const CONFIG = {
+    API_URL: 'https://script.google.com/macros/s/AKfycbzww0-Wb9bh7QmzsoBU6bg9c8o9aD5bqDdrJO6R9H8RSMafvoJHq3wd6rRyR2DHT9vSUA/exec',
+    CLOUDINARY_CLOUD: 'dc2gwj09q',
+    CLOUDINARY_PRESET: 'ogies_gadgets',
+    CLOUDINARY_API_KEY: ''
+  };
+
+  const SIZE = 10;
+  const RESERVED_SLUGS = ['shop', 'cart', 'checkout', 'done', 'product', 'products', 'category', 'categories', 'new-arrivals', 'best-sellers', 'about', 'contact', 'page', 'admin', 'home'];
+  const DEFAULT_NAV = [
+    { nav_id: 'home', label: 'Home', target: '/', type: 'builtin', is_visible: 'yes', sort_order: 10 },
+    { nav_id: 'shop', label: 'Shop', target: '/shop', type: 'module:shop', is_visible: 'yes', sort_order: 20 },
+    { nav_id: 'new-arrivals', label: 'New arrivals', target: '/new-arrivals', type: 'module:newArrivals', is_visible: 'yes', sort_order: 30 },
+    { nav_id: 'categories', label: 'Categories', target: '/categories', type: 'module:categories', is_visible: 'yes', sort_order: 40 },
+    { nav_id: 'best-sellers', label: 'Best sellers', target: '/best-sellers', type: 'module:bestSellers', is_visible: 'yes', sort_order: 50 },
+    { nav_id: 'about', label: 'About', target: '/about', type: 'builtin', is_visible: 'yes', sort_order: 60 },
+    { nav_id: 'contact', label: 'Contact', target: '/contact', type: 'builtin', is_visible: 'yes', sort_order: 70 }
+  ];
+
+  const state = {
+    session: '',
+    orders: [],
+    products: [],
+    customers: [],
+    settings: {},
+    dashboard: {},
+    hero: {},
+    categories: [],
+    customPages: [],
+    navigation: [],
+    mediaAssets: [],
+    legacyBackend: false,
+    orderStatus: 'all',
+    orderQuery: '',
+    orderPage: 1,
+    productQuery: '',
+    imgDraft: [],
+    loadedStock: undefined,
+    editingProductId: '',
+    editingCustomerEmail: '',
+    curOrder: null,
+    heroViewport: 'desktop'
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+
+  function secureImageUrl(value) {
+    try {
+      const url = new URL(String(value || '').trim());
+      return url.protocol === 'https:' ? url.href : '';
+    } catch { return ''; }
+  }
+
+  function cloudinaryThumb(url, w = 160) {
+    const clean = secureImageUrl(url);
+    if (!clean) return '';
+    if (clean.includes('res.cloudinary.com') && clean.includes('/image/upload/')) {
+      return clean.replace('/image/upload/', `/image/upload/f_auto,q_auto,w_${w}/`);
+    }
+    return clean;
+  }
+
+  const money = (n) => (state.settings.currency_symbol || '₦') + (Number.isFinite(Number(n)) ? Math.round(Number(n)).toLocaleString('en-NG') : '0');
+  const pc = (s) => ({ Paid: 'g', 'In Stock': 'g', Active: 'g', Pending: 'a', 'Few Left': 'a', Cancelled: 'r', 'Out of Stock': 'r', Inactive: 'r' }[s] || 'a');
+  const pill = (s) => `<span class="pill s-${pc(s)}">${esc(s)}</span>`;
+  const slugify = (v) => String(v || '').toLowerCase().replace(/&/g, ' and ').replace(/['’]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 100);
+  const fmtBytes = (n) => !n ? '—' : n < 1024 ? `${n} B` : n < 1048576 ? `${(n / 1024).toFixed(1)} KB` : `${(n / 1048576).toFixed(2)} MB`;
+
+  let toastTimer = 0;
+  function toast(message, error) {
+    const node = $('toast');
+    if (!node) return;
+    node.textContent = message;
+    node.className = 'on' + (error ? ' err' : '');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { node.className = ''; }, 3600);
+  }
+
+  function activePreset() {
+    try {
+      const stored = localStorage.getItem('thimble_cloudinary_preset') || '';
+      if (stored && !stored.startsWith('REPLACE_WITH_')) return stored.trim();
+    } catch {}
+    return CONFIG.CLOUDINARY_PRESET;
+  }
+
+  function isPresetReady() {
+    const p = activePreset();
+    return Boolean(p && !p.startsWith('REPLACE_WITH_'));
+  }
+
+  function activeCloudKey() {
+    return String(state.settings.cloudinary_api_key || CONFIG.CLOUDINARY_API_KEY || '').trim();
+  }
+
+  /* ===== 2. API LAYER ===== */
+  async function api(action, data, fetchImpl = globalThis.fetch) {
+    if (!CONFIG.API_URL || CONFIG.API_URL.includes('REPLACE_WITH_')) {
+      throw new Error('Configure API_URL in admin.html before signing in.');
+    }
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+    try {
+      const response = await fetchImpl(CONFIG.API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action, session: state.session }, data || {})),
+        signal: controller.signal
+      });
+      const raw = await response.text();
+      let result;
+      try { result = JSON.parse(raw); } catch {
+        throw new Error('Server returned an unreadable response. Check the Apps Script deployment.');
+      }
+      if (!response.ok) throw new Error('Server request failed (' + response.status + ').');
+      if (!result.ok) {
+        const error = new Error(result.error || 'Something went wrong.');
+        error.data = result;
+        if (/log in again/i.test(error.message)) logout();
+        throw error;
+      }
+      return result;
+    } catch (error) {
+      if (error && error.name === 'AbortError') throw new Error('Request timed out. Refresh before retrying.');
+      throw error;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  /* ===== 3. AUTH & WORKSPACE LOADING ===== */
+  async function login() {
+    const button = $('lgb');
+    button.disabled = true;
+    button.textContent = 'Checking…';
+    $('lge').textContent = '';
+    try {
+      const result = await api('login', { token: $('tok').value.trim() });
+      state.session = result.session;
+      try { sessionStorage.setItem('s', state.session); } catch {}
+      $('tok').value = '';
+      const loaded = await load();
+      if (!loaded) {
+        logout();
+        throw new Error('Signed in, but dashboard data failed to load.');
+      }
+      $('login').classList.add('hide');
+      $('app').classList.remove('hide');
+    } catch (error) {
+      $('lge').textContent = error.message;
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Sign in';
+    }
+  }
+
+  function logout() {
+    state.session = '';
+    state.orders = [];
+    state.products = [];
+    state.customers = [];
+    state.settings = {};
+    state.dashboard = {};
+    state.hero = {};
+    state.categories = [];
+    state.customPages = [];
+    state.navigation = [];
+    state.mediaAssets = [];
+    state.curOrder = null;
+    state.imgDraft = [];
+    state.editingProductId = '';
+    state.editingCustomerEmail = '';
+    try { sessionStorage.removeItem('s'); } catch {}
+    ['ot', 'pt', 'ct', 'bars', 'alerts', 'sf', 'cat-t', 'pg-t', 'nav-t', 'quick-strip'].forEach((id) => {
+      if ($(id)) $(id).innerHTML = '';
+    });
+    ['k1', 'k2', 'k3', 'k4', 'bo', 'upd', 'sname'].forEach((id) => {
+      if ($(id)) $(id).textContent = '';
+    });
+    $('logo').textContent = 'S';
+    $('tok').value = '';
+    $('md').innerHTML = '';
+    $('app').classList.add('hide');
+    $('login').classList.remove('hide');
+    closeM();
+  }
+
+  async function load() {
+    try {
+      let ws;
+      try {
+        ws = await api('getAdminWorkspace');
+        state.legacyBackend = false;
+      } catch (err) {
+        if (/unknown action/i.test(err.message || '')) {
+          const [dashboard, orders, products, customers, settings] = await Promise.all([
+            api('getDashboard'), api('getOrders'), api('getProducts'), api('getCustomers'), api('adminGetSettings')
+          ]);
+          ws = {
+            dashboard,
+            orders: orders.orders,
+            products: products.products,
+            customers: customers.customers,
+            settings: settings.settings,
+            hero: {},
+            categories: [],
+            customPages: [],
+            navigation: DEFAULT_NAV,
+            mediaAssets: []
+          };
+          state.legacyBackend = true;
+        } else {
+          throw err;
+        }
+      }
+
+      state.dashboard = ws.dashboard || {};
+      state.orders = Array.isArray(ws.orders) ? ws.orders : [];
+      state.products = Array.isArray(ws.products) ? ws.products : [];
+      state.customers = Array.isArray(ws.customers) ? ws.customers : [];
+      state.settings = ws.settings || {};
+      state.hero = ws.hero || {};
+      state.categories = Array.isArray(ws.categories) ? ws.categories : [];
+      state.customPages = Array.isArray(ws.customPages) ? ws.customPages : [];
+      state.navigation = Array.isArray(ws.navigation) && ws.navigation.length ? ws.navigation : DEFAULT_NAV.map((n) => ({ ...n }));
+      state.mediaAssets = Array.isArray(ws.mediaAssets) ? ws.mediaAssets : [];
+
+      $('upd').textContent = 'Updated ' + new Date().toLocaleTimeString('en-NG', { hour: '2-digit', minute: '2-digit' });
+      const banner = $('compat-banner');
+      if (state.legacyBackend) {
+        banner.textContent = 'Connected to legacy Code.gs. Update your Apps Script with thecode.gs and run setupSheets() to unlock Hero Image Studio, Custom Pages, CSV Bulk Import, and Categories.';
+        banner.classList.remove('hide');
+      } else {
+        banner.classList.add('hide');
+      }
+      brand();
+      renderAll();
+      return true;
+    } catch (error) {
+      toast(error.message, true);
+      return false;
+    }
+  }
+
+  function brand() {
+    const colour = String(state.settings.brand_color || '');
+    if (/^#[0-9a-f]{6}$/i.test(colour)) document.documentElement.style.setProperty('--acc', colour);
+    $('sname').textContent = state.settings.store_name || 'Store';
+    document.title = (state.settings.store_name || 'Store') + ' — Admin';
+    const logoUrl = secureImageUrl(state.settings.logo_url);
+    $('logo').innerHTML = logoUrl ? `<img src="${esc(logoUrl)}" alt="">` : esc((state.settings.store_name || 'S').slice(0, 1));
+  }
+
+  function renderAll() {
+    renderOv();
+    renderOrders();
+    renderProds();
+    renderCategories();
+    renderHeroForm();
+    renderNavTable();
+    renderCustomPages();
+    renderCust();
+    renderSet();
+    updatePresetBanner();
+  }
+
+  /* ===== 4. OVERVIEW ===== */
+  function lagosDate(date) {
+    const parts = new Intl.DateTimeFormat('en-CA', { timeZone: 'Africa/Lagos', year: 'numeric', month: '2-digit', day: '2-digit' }).formatToParts(date);
+    const values = {};
+    parts.forEach((p) => { values[p.type] = p.value; });
+    return `${values.year}-${values.month}-${values.day}`;
+  }
+
+  function lagosDayOffset(offset) {
+    const current = lagosDate(new Date()).split('-').map(Number);
+    return new Date(Date.UTC(current[0], current[1] - 1, current[2] + offset)).toISOString().slice(0, 10);
+  }
+
+  function renderOv() {
+    const alerts = Array.isArray(state.dashboard.stockAlerts) ? state.dashboard.stockAlerts : [];
+    $('k1').textContent = money(state.dashboard.salesToday);
+    $('k2').textContent = Number(state.dashboard.ordersToday || 0);
+    $('k3').textContent = Number(state.dashboard.pendingCount || 0);
+    $('k4').textContent = alerts.length;
+    $('bo').textContent = Number(state.dashboard.pendingCount || 0);
+
+    const days = [], sums = {};
+    for (let i = -6; i <= 0; i++) days.push(lagosDayOffset(i));
+    state.orders.forEach((o) => {
+      if (o.status === 'Paid') {
+        const day = String(o.paid_at || '').slice(0, 10);
+        sums[day] = (sums[day] || 0) + Number(o.total || 0);
+      }
+    });
+    const max = Math.max(1, ...days.map((d) => sums[d] || 0));
+    $('bars').innerHTML = days.map((d) => `<div class="bar"><span class="mono">${esc(money(sums[d] || 0))}</span><i style="height:${Math.max(2, (sums[d] || 0) / max * 100)}%"></i>${d.slice(8)}</div>`).join('');
+
+    $('alerts').innerHTML = alerts.length
+      ? alerts.map((i) => `<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--bd)"><span>${esc(i.name)} <span class="sm">· ${Number(i.stock)} left</span></span>${pill(i.status)}</div>`).join('')
+      : '<div class="empty">All products are well stocked ✓</div>';
+
+    const activePages = state.customPages.filter((p) => p.is_active === 'yes').length;
+    const hasHero = Boolean(secureImageUrl(state.hero.image_url));
+    $('quick-strip').innerHTML = `
+      <div class="qcard"><div><div class="fl">Hero Image</div><strong>${hasHero ? 'Cloudinary Hero Live' : 'No Hero Image Set'}</strong></div><button class="pb" type="button" data-jump="he">Customize</button></div>
+      <div class="qcard"><div><div class="fl">Custom Pages</div><strong>${activePages} Active / ${state.customPages.length} Total</strong></div><button class="pb" type="button" data-jump="pg">Manage</button></div>
+      <div class="qcard"><div><div class="fl">Catalog &amp; CSV</div><strong>${state.products.length} Products · ${state.categories.length} Categories</strong></div><button class="pb" type="button" data-jump="pr">Products</button></div>
+    `;
+  }
+
+  /* ===== 5. ORDERS ===== */
+  function filtOrders() {
+    return state.orders.filter((o) => (state.orderStatus === 'all' || o.status === state.orderStatus)
+      && (!state.orderQuery || [o.order_id, o.customer_name, o.customer_phone, o.customer_email].join(' ').toLowerCase().includes(state.orderQuery)));
+  }
+
+  function renderOrders() {
+    const filtered = filtOrders();
+    const pages = Math.max(1, Math.ceil(filtered.length / SIZE));
+    state.orderPage = Math.min(Math.max(1, state.orderPage), pages);
+    const offset = (state.orderPage - 1) * SIZE;
+    const page = filtered.slice(offset, offset + SIZE);
+
+    $('ot').innerHTML = page.length ? page.map((order) => {
+      const items = Array.isArray(order.items) ? order.items : [];
+      const summary = items.map((i) => `${Number(i.qty)}× ${String(i.name || '')}`).join(', ');
+      const actions = order.status === 'Pending'
+        ? `<button class="ra go" type="button" data-action="pay" data-id="${esc(order.order_id)}">Confirm payment</button><button class="ra d" type="button" data-action="cancel" data-id="${esc(order.order_id)}">Cancel</button>`
+        : `<button class="ra" type="button" data-action="view-order" data-id="${esc(order.order_id)}">View</button>`;
+      return `<tr><td class="mono sm">${esc(order.order_id)}</td><td><b>${esc(order.customer_name)}</b><div class="sm">${esc(order.customer_phone)}</div></td><td class="hm"><div class="ell" title="${esc(summary)}">${esc(summary)}</div></td><td class="mono">${money(order.total)}</td><td class="hm sm">${esc(String(order.created_at || '').slice(0, 16))}</td><td>${pill(order.status)}</td><td>${actions}</td></tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty">No orders match</td></tr>';
+
+    $('oi').textContent = filtered.length ? `Showing ${offset + 1}–${Math.min(offset + SIZE, filtered.length)} of ${filtered.length}` : '0 orders';
+    $('opg').innerHTML = pages > 1 ? Array.from({ length: pages }, (_, i) => `<button type="button" class="${i + 1 === state.orderPage ? 'on' : ''}" data-action="page" data-page="${i + 1}">${i + 1}</button>`).join('') : '';
+  }
+
+  function orderBox(order) {
+    const items = Array.isArray(order.items) ? order.items : [];
+    return `<p class="sm" style="margin-bottom:12px"><span class="mono" style="color:var(--acc)">${esc(order.order_id)}</span> · ${esc(order.customer_name)}<br>${esc(order.customer_phone)} · ${esc(order.customer_email)}<br>${esc(order.customer_address)}</p>`
+      + items.map((i) => `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--bd)"><span>${Number(i.qty)}× ${esc(i.name)}</span><span class="mono">${money(Number(i.price) * Number(i.qty))}</span></div>`).join('')
+      + `<div style="display:flex;justify-content:space-between;padding:10px 0;font-weight:700"><span>Total</span><span class="mono">${money(order.total)}</span></div>`;
+  }
+
+  function orderEmailRetryBox(order) {
+    const needsRetry = order.order_customer_email_sent !== 'yes' || order.order_owner_email_sent !== 'yes';
+    return needsRetry ? '<div class="warn">Order notification emails need attention. <button class="ra" type="button" id="oer">Retry order emails</button></div>' : '';
+  }
+
+  function openPay(id) {
+    state.curOrder = state.orders.find((o) => String(o.order_id) === String(id));
+    if (!state.curOrder) return toast('Order not found. Refresh dashboard.', true);
+    modal(`<h3 class="sy">Confirm payment</h3><p class="sm" style="margin-bottom:10px">Deducts stock once and emails the customer receipt.</p>${orderBox(state.curOrder)}${orderEmailRetryBox(state.curOrder)}<div id="pw"></div><div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn g" type="button" id="pb2">Confirm payment</button></div>`);
+    $('pb2').onclick = () => confirmPay(false);
+    if ($('oer')) $('oer').onclick = retryOrderEmails;
+  }
+
+  async function confirmPay(force) {
+    const button = $('pb2');
+    button.disabled = true;
+    button.textContent = 'Working…';
+    try {
+      const result = await api('markPaid', { orderId: state.curOrder.order_id, force: force === true });
+      closeM();
+      toast(result.receiptSent ? 'Payment confirmed. Receipt sent ✓' : (result.receiptInProgress ? 'Payment confirmed. Receipt sending…' : 'Payment confirmed, but receipt email failed.'), !result.receiptSent && !result.receiptInProgress);
+      await load();
+    } catch (error) {
+      button.disabled = false;
+      if (error.data && error.data.error === 'low_stock') {
+        $('pw').innerHTML = '<div class="warn"><b>Not enough stock:</b><br>' + error.data.shortages.map((i) => `${esc(i.name)}: needs ${Number(i.needed)}, only ${Number(i.have)} left`).join('<br>') + '</div>';
+        button.textContent = 'Confirm anyway';
+        button.onclick = () => confirmPay(true);
+      } else {
+        button.textContent = 'Confirm payment';
+        toast(error.message, true);
+      }
+    }
+  }
+
+  function openView(id) {
+    state.curOrder = state.orders.find((o) => String(o.order_id) === String(id));
+    if (!state.curOrder) return toast('Order not found.', true);
+    const receipt = state.curOrder.status === 'Paid' && state.curOrder.payment_email_sent !== 'yes'
+      ? '<div class="warn">Payment receipt email not confirmed.</div><button class="btn" type="button" id="rr">Retry receipt email</button>' : '';
+    const undo = state.curOrder.status === 'Paid' && (!state.curOrder.payment_state || state.curOrder.payment_state === 'COMPLETE')
+      ? `<button class="btn o" type="button" style="color:var(--t)" data-action="undo-payment" data-id="${esc(state.curOrder.order_id)}">Undo payment</button>` : '';
+    modal(`<h3 class="sy">Order details</h3>${orderBox(state.curOrder)}${orderEmailRetryBox(state.curOrder)}<p class="sm">Status: ${pill(state.curOrder.status)}${state.curOrder.paid_at ? ' · Paid ' + esc(state.curOrder.paid_at) : ''}</p>${receipt}<div class="acts">${undo}<button class="btn o" type="button" data-close-modal>Close</button></div>`);
+    if ($('oer')) $('oer').onclick = retryOrderEmails;
+    if ($('rr')) $('rr').onclick = retryReceipt;
+  }
+
+  async function retryOrderEmails() {
+    const button = $('oer');
+    if (button) { button.disabled = true; button.textContent = 'Sending…'; }
+    try {
+      const result = await api('retryOrderEmails', { orderId: state.curOrder.order_id });
+      await load();
+      const allSent = result.customerEmailSent && result.ownerEmailSent;
+      toast(allSent ? 'Order notification emails sent ✓' : 'Check mail quota and retry.', !allSent);
+      closeM();
+    } catch (error) {
+      if (button) { button.disabled = false; button.textContent = 'Retry order emails'; }
+      toast(error.message, true);
+    }
+  }
+
+  async function retryReceipt() {
+    const button = $('rr');
+    if (button) { button.disabled = true; button.textContent = 'Sending…'; }
+    try {
+      const result = await api('retryReceipt', { orderId: state.curOrder.order_id });
+      closeM();
+      toast(result.receiptSent ? 'Receipt email sent ✓' : 'Email sending or failed.', !result.receiptSent);
+      await load();
+    } catch (error) {
+      if (button) { button.disabled = false; button.textContent = 'Retry receipt email'; }
+      toast(error.message, true);
+    }
+  }
+
+  function confirmDialog({ title, message, confirmLabel = 'Confirm', danger = true, onConfirm }) {
+    modal(`<h3 class="sy">${esc(title)}</h3><p class="sm" style="margin:10px 0 18px;font-size:.88rem;color:var(--ink)">${esc(message)}</p><div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn ${danger ? 'd' : ''}" type="button" id="cf-ok">${esc(confirmLabel)}</button></div>`);
+    $('cf-ok').onclick = async () => {
+      $('cf-ok').disabled = true;
+      $('cf-ok').textContent = 'Working…';
+      await onConfirm();
+    };
+  }
+
+  function cancelOrd(id) {
+    confirmDialog({
+      title: 'Cancel pending order?',
+      message: `Are you sure you want to cancel order ${id}?`,
+      confirmLabel: 'Cancel order',
+      onConfirm: async () => {
+        try {
+          await api('cancelOrder', { orderId: id });
+          closeM();
+          toast('Order cancelled');
+          await load();
+        } catch (error) { toast(error.message, true); closeM(); }
+      }
+    });
+  }
+
+  function revertPay(id) {
+    confirmDialog({
+      title: 'Undo payment?',
+      message: 'Stock returns to inventory and the order becomes Pending again. The customer already received a receipt email, so update them on WhatsApp.',
+      confirmLabel: 'Undo payment',
+      onConfirm: async () => {
+        try {
+          await api('revertPaid', { orderId: id });
+          closeM();
+          toast('Payment undone. Order is Pending again.');
+          await load();
+        } catch (error) { toast(error.message, true); closeM(); }
+      }
+    });
+  }
+
+  /* ===== 6. CLOUDINARY UPLOADS & MEDIA PICKER ===== */
+  async function uploadFileToCloudinary(file, extraFolderTag = '') {
+    if (!isPresetReady()) throw new Error('Set your Cloudinary unsigned upload preset first in Settings -> Cloudinary Browser Setup.');
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/avif'].includes(file.type)) {
+      throw new Error('Use a JPG, PNG, WebP or AVIF image.');
+    }
+    if (file.size > 10 * 1024 * 1024) throw new Error('Image must be 10 MB or smaller.');
+
+    const form = new FormData();
+    form.append('file', file);
+    form.append('upload_preset', activePreset());
+    if (extraFolderTag) form.append('tags', `store-asset,${extraFolderTag}`);
+    else form.append('tags', 'store-asset');
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${encodeURIComponent(CONFIG.CLOUDINARY_CLOUD)}/image/upload`, {
+      method: 'POST',
+      body: form
+    });
+    const result = await response.json();
+    if (!response.ok || !result.secure_url || !/^https:\/\//i.test(result.secure_url)) {
+      throw new Error((result.error && result.error.message) || 'Cloudinary upload failed.');
+    }
+    // Best-effort register in MediaAssets tab
+    try {
+      await api('registerMediaAsset', {
+        asset: {
+          url: result.secure_url,
+          public_id: result.public_id || '',
+          label: result.original_filename || file.name || 'Uploaded image',
+          tags: extraFolderTag || 'upload',
+          width: result.width || 0,
+          height: result.height || 0,
+          format: result.format || ''
+        }
+      });
+    } catch {}
+    return result;
+  }
+
+  function loadScriptOnce(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) return resolve();
+      const s = document.createElement('script');
+      s.src = src;
+      s.async = true;
+      s.onload = () => resolve();
+      s.onerror = () => reject(new Error('Could not load Cloudinary widget script.'));
+      document.head.appendChild(s);
+    });
+  }
+
+  async function openCloudinaryUploadWidget({ cropping = false, multiple = false, tag = 'store-asset', onSuccess }) {
+    if (!isPresetReady()) return toast('Set your Cloudinary upload preset in Settings first.', true);
+    try {
+      await loadScriptOnce('https://upload-widget.cloudinary.com/latest/global/all.js');
+      if (!globalThis.cloudinary || !globalThis.cloudinary.createUploadWidget) {
+        throw new Error('Cloudinary upload widget is unavailable.');
+      }
+      const widget = globalThis.cloudinary.createUploadWidget({
+        cloudName: CONFIG.CLOUDINARY_CLOUD,
+        uploadPreset: activePreset(),
+        sources: ['local', 'url', 'camera'],
+        multiple,
+        cropping,
+        tags: ['store-asset', tag],
+        clientAllowedFormats: ['jpg', 'jpeg', 'png', 'webp', 'avif'],
+        maxImageFileSize: 10 * 1024 * 1024
+      }, async (error, result) => {
+        if (error) {
+          toast(error.message || 'Cloudinary widget error', true);
+          return;
+        }
+        if (result && result.event === 'success' && result.info && result.info.secure_url) {
+          try {
+            await api('registerMediaAsset', {
+              asset: {
+                url: result.info.secure_url,
+                public_id: result.info.public_id || '',
+                label: result.info.original_filename || 'Cloudinary upload',
+                tags: tag,
+                width: result.info.width || 0,
+                height: result.info.height || 0,
+                format: result.info.format || ''
+              }
+            });
+          } catch {}
+          onSuccess(result.info);
+        }
+      });
+      widget.open();
+    } catch (err) {
+      toast(err.message, true);
+    }
+  }
+
+  async function fetchTagListAssets() {
+    try {
+      const res = await fetch(`https://res.cloudinary.com/${encodeURIComponent(CONFIG.CLOUDINARY_CLOUD)}/image/list/store-asset.json`);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return (data.resources || []).map((r) => ({
+        public_id: r.public_id,
+        url: `https://res.cloudinary.com/${CONFIG.CLOUDINARY_CLOUD}/image/upload/v${r.version || 1}/${r.public_id}.${r.format || 'jpg'}`,
+        label: r.public_id,
+        tags: 'cloudinary'
+      }));
+    } catch { return []; }
+  }
+
+  async function openMediaLibraryPicker(onSelect) {
+    let assets = state.mediaAssets.slice();
+    const seen = new Set(assets.map((a) => a.url));
+    const tagAssets = await fetchTagListAssets();
+    tagAssets.forEach((a) => {
+      if (!seen.has(a.url)) {
+        seen.add(a.url);
+        assets.push(a);
+      }
+    });
+
+    const key = activeCloudKey();
+    const mlBtn = key ? '<button class="pb" type="button" id="btn-ml-official">Open Cloudinary Account Browser</button>' : '';
+
+    modal(`<h3 class="sy">Select Existing Image</h3>
+      <p class="sm" style="margin-bottom:10px">Pick from store Media Assets or your Cloudinary account (${esc(CONFIG.CLOUDINARY_CLOUD)}).</p>
+      <div class="tb-acts" style="margin-bottom:10px">
+        <input class="search" id="ml-q" placeholder="Filter by label or public ID…" style="flex:1">
+        ${mlBtn}
+      </div>
+      <div class="media-grid" id="ml-grid"></div>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button></div>`, true);
+
+    const drawGrid = () => {
+      const q = ($('ml-q').value || '').toLowerCase();
+      const filtered = assets.filter((a) => !q || (String(a.label) + ' ' + String(a.public_id) + ' ' + String(a.tags)).toLowerCase().includes(q));
+      $('ml-grid').innerHTML = filtered.length
+        ? filtered.map((a, idx) => `<button type="button" class="media-item" data-ml-idx="${idx}"><img src="${esc(cloudinaryThumb(a.url, 260))}" alt=""><span>${esc(a.label || a.public_id || 'Image')}</span></button>`).join('')
+        : '<div class="empty" style="grid-column:1/-1">No recorded assets match. Upload a new image or open Cloudinary Media Library.</div>';
+
+      $('ml-grid').querySelectorAll('[data-ml-idx]').forEach((btn) => {
+        btn.onclick = () => {
+          const item = filtered[Number(btn.dataset.mlIdx)];
+          if (item) {
+            onSelect(item.url, item.public_id || '');
+            closeM();
+          }
+        };
+      });
+    };
+
+    $('ml-q').oninput = drawGrid;
+    drawGrid();
+
+    if ($('btn-ml-official')) {
+      $('btn-ml-official').onclick = async () => {
+        try {
+          await loadScriptOnce('https://media-library.cloudinary.com/global/all.js');
+          if (!globalThis.cloudinary || !globalThis.cloudinary.createMediaLibrary) throw new Error('Cloudinary Media Library widget could not load.');
+          const ml = globalThis.cloudinary.createMediaLibrary({
+            cloud_name: CONFIG.CLOUDINARY_CLOUD,
+            api_key: key,
+            multiple: false
+          }, {
+            insertHandler(data) {
+              const asset = data && data.assets && data.assets[0];
+              if (asset && asset.secure_url) {
+                onSelect(asset.secure_url, asset.public_id || '');
+                closeM();
+              }
+            }
+          });
+          ml.show();
+        } catch (err) { toast(err.message, true); }
+      };
+    }
+  }
+
+  /* ===== 7. PRODUCTS ===== */
+  function renderProds() {
+    const q = (state.productQuery || '').trim().toLowerCase();
+    const list = state.products.filter((p) => !q || `${p.name} ${p.sku || ''} ${p.id} ${p.category || ''}`.toLowerCase().includes(q));
+    $('pt').innerHTML = list.length ? list.map((p) => {
+      const thumb = p.images && secureImageUrl(p.images[0])
+        ? `<img class="thumb" src="${esc(cloudinaryThumb(p.images[0], 100))}" alt="">`
+        : '<div class="thumb"></div>';
+      const skuBadge = p.sku ? `<span class="mono sm">SKU: ${esc(p.sku)}</span>` : `<span class="mono sm">${esc(p.id)}</span>`;
+      const compare = Number(p.compare_at_price) > Number(p.price) ? ` <span class="sm" style="text-decoration:line-through">${money(p.compare_at_price)}</span>` : '';
+      return `<tr><td>${thumb}</td><td><b>${esc(p.name)}</b><div>${skuBadge}</div></td><td class="hm sm">${esc(p.category)}</td><td class="mono">${money(p.price)}${compare}</td><td class="mono">${Number(p.stock)}</td><td>${pill(p.status)}</td><td><button class="ra" type="button" data-action="edit-product" data-id="${esc(p.id)}">Edit</button><button class="ra d" type="button" data-action="delete-product" data-id="${esc(p.id)}">Delete</button></td></tr>`;
+    }).join('') : '<tr><td colspan="7" class="empty">No products match. Add a product or import via CSV.</td></tr>';
+  }
+
+  function newProductRequestId() {
+    return (globalThis.crypto && globalThis.crypto.randomUUID)
+      ? globalThis.crypto.randomUUID()
+      : 'req_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+  }
+
+  function productFingerprintKey(value) {
+    let hash = 2166136261;
+    for (let i = 0; i < value.length; i++) {
+      hash ^= value.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return 'store_product_request_' + (hash >>> 0).toString(16);
+  }
+
+  function editProd(id) {
+    const product = state.products.find((i) => String(i.id) === String(id)) || { images: [], status: 'In Stock', status_locked: 'no' };
+    state.editingProductId = product.id || '';
+    state.loadedStock = product.id ? Number(product.stock) : undefined;
+    state.imgDraft = Array.isArray(product.images) ? [...product.images] : [];
+
+    const catSet = new Set();
+    state.categories.forEach((c) => { if (c.name) catSet.add(c.name); });
+    String(state.settings.categories || 'General').split(',').map((s) => s.trim()).filter(Boolean).forEach((s) => catSet.add(s));
+    if (product.category) catSet.add(product.category);
+    const categories = [...catSet];
+
+    modal(`<h3 class="sy" style="margin-bottom:14px">${state.editingProductId ? 'Edit' : 'Add'} product</h3>
+      <div class="row2">
+        <div><label class="fl" for="pn">Name</label><input class="in" id="pn" maxlength="120" value="${esc(product.name || '')}"></div>
+        <div><label class="fl" for="psku">SKU / Code (optional, unique)</label><input class="in mono" id="psku" maxlength="64" value="${esc(product.sku || '')}" placeholder="e.g. THM-001"></div>
+      </div>
+      <div class="row2">
+        <div><label class="fl" for="pp">Selling price (whole number)</label><input class="in" id="pp" type="number" min="1" step="1" value="${Number.isFinite(Number(product.price)) ? Number(product.price) : ''}"></div>
+        <div><label class="fl" for="ps">Stock count</label><input class="in" id="ps" type="number" min="0" step="1" value="${Number(product.stock) || 0}"></div>
+      </div>
+      <div class="row2">
+        <div><label class="fl" for="pcmp">Original price (optional, for a sale)</label><input class="in" id="pcmp" type="number" min="0" step="1" value="${Number(product.compare_at_price) > 0 ? Number(product.compare_at_price) : ''}" placeholder="Leave blank if not discounted"></div>
+        <div><label class="fl" for="pfe">Homepage</label><label class="switch" style="padding:10px 0"><input type="checkbox" id="pfe" ${product.featured === 'yes' ? 'checked' : ''}> Feature on homepage</label></div>
+      </div>
+      <label class="fl" for="pcat">Category</label>
+      <select class="in" id="pcat">${categories.map((c) => `<option value="${esc(c)}"${c === product.category ? ' selected' : ''}>${esc(c)}</option>`).join('')}</select>
+      <label class="fl" for="pd">Description</label>
+      <textarea class="in" id="pd" maxlength="2000">${esc(product.description || '')}</textarea>
+      <label class="fl">Images (first is cover; max 8)</label>
+      <div class="imgs" id="im"></div>
+      <div class="tb-acts" style="margin-bottom:14px">
+        <label class="pb" style="cursor:pointer">Upload Images<input type="file" id="pf" accept="image/jpeg,image/png,image/webp,image/avif" multiple class="hide"></label>
+        <button class="pb" type="button" id="p-wid">Cloudinary Widget</button>
+        <button class="pb" type="button" id="p-lib">Pick Existing Image</button>
+      </div>
+      <label class="switch" style="margin-bottom:10px"><input type="checkbox" id="pl" ${product.status_locked === 'yes' ? 'checked' : ''}> Set status manually (otherwise follows stock)</label>
+      <select class="in" id="pst" ${product.status_locked === 'yes' ? '' : 'disabled'}>${['In Stock', 'Few Left', 'Out of Stock'].map((s) => `<option${s === product.status ? ' selected' : ''}>${s}</option>`).join('')}</select>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn" type="button" id="psb">Save product</button></div>`);
+
+    $('pl').onchange = () => { $('pst').disabled = !$('pl').checked; };
+    $('pf').onchange = (e) => uploadProductImgs(e.target.files);
+    $('p-wid').onclick = () => openCloudinaryUploadWidget({
+      multiple: true, tag: 'product',
+      onSuccess(info) {
+        if (state.imgDraft.length < 8) { state.imgDraft.push(info.secure_url); drawImgs(); }
+      }
+    });
+    $('p-lib').onclick = () => {
+      openMediaLibraryPicker((url) => {
+        if (state.imgDraft.length < 8) state.imgDraft.push(url);
+        editProd(state.editingProductId); // reopen isn't needed if we avoid losing edits, wait - picker replaces modal cleanly, let's preserve form below:
+      });
+    };
+    // Keep inline picker inside product modal without losing typed inputs:
+    $('p-lib').onclick = () => showInlinePicker('im-pick', (url) => {
+      if (state.imgDraft.length >= 8) return toast('Max 8 images reached.', true);
+      state.imgDraft.push(url);
+      drawImgs();
+    });
+    $('psb').onclick = saveProd;
+    drawImgs();
+  }
+
+  function showInlinePicker(containerId, onSelect) {
+    let holder = $(containerId);
+    if (!holder) {
+      holder = document.createElement('div');
+      holder.id = containerId;
+      holder.style.cssText = 'border:1px solid var(--bd);border-radius:10px;padding:10px;margin-bottom:12px;background:var(--bg)';
+      $('im').after(holder);
+    }
+    const assets = state.mediaAssets.slice(0, 30);
+    holder.innerHTML = assets.length
+      ? `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><span class="fl" style="margin:0">Pick from Store Media</span><button type="button" class="ra" id="${containerId}-x">Close</button></div><div class="media-grid" style="max-height:180px;margin:0">${assets.map((a, idx) => `<button type="button" class="media-item" data-pick-idx="${idx}"><img src="${esc(cloudinaryThumb(a.url, 180))}" style="height:68px" alt=""><span>${esc(a.label)}</span></button>`).join('')}</div>`
+      : '<div class="sm">No stored images yet. Upload first to populate Media Assets.</div>';
+    if ($(containerId + '-x')) $(containerId + '-x').onclick = () => holder.remove();
+    holder.querySelectorAll('[data-pick-idx]').forEach((b) => {
+      b.onclick = () => { onSelect(assets[Number(b.dataset.pickIdx)].url); holder.remove(); };
+    });
+  }
+
+  function drawImgs() {
+    $('im').innerHTML = state.imgDraft.map((url, idx) => `<div><img src="${esc(cloudinaryThumb(url, 160))}" alt="Product image ${idx + 1}"><button class="rm-i" type="button" data-action="remove-image" data-index="${idx}" aria-label="Remove image">×</button></div>`).join('');
+  }
+
+  async function uploadProductImgs(files) {
+    const button = $('psb');
+    if (!files || !files.length) return;
+    button.disabled = true;
+    button.textContent = 'Uploading…';
+    try {
+      for (const file of Array.from(files)) {
+        if (state.imgDraft.length >= 8) throw new Error('Maximum 8 images per product.');
+        const res = await uploadFileToCloudinary(file, 'product');
+        state.imgDraft.push(res.secure_url);
+        drawImgs();
+      }
+    } catch (error) {
+      toast(error.message, true);
+    } finally {
+      button.disabled = false;
+      button.textContent = 'Save product';
+      if ($('pf')) $('pf').value = '';
+    }
+  }
+
+  async function saveProd() {
+    const button = $('psb');
+    const price = $('pp').value, stock = $('ps').value;
+    if (!String($('pn').value).trim() || price === '' || stock === '' || !Number.isSafeInteger(Number(price)) || !Number.isSafeInteger(Number(stock)) || Number(price) < 1 || Number(stock) < 0) {
+      return toast('Enter a product name, whole-number price (>=1) and stock (>=0).', true);
+    }
+    const compare = $('pcmp').value;
+    if (compare !== '' && (!Number.isSafeInteger(Number(compare)) || Number(compare) < 0 || (Number(compare) > 0 && Number(compare) <= Number(price)))) {
+      return toast('Original price must be higher than selling price, or blank.', true);
+    }
+    const product = {
+      id: state.editingProductId,
+      sku: $('psku').value.trim(),
+      name: $('pn').value.trim(),
+      price: Number(price),
+      stock: Number(stock),
+      category: $('pcat').value,
+      description: $('pd').value,
+      images: state.imgDraft,
+      status_locked: $('pl').checked,
+      status: $('pst').value,
+      compare_at_price: compare === '' ? 0 : Number(compare),
+      featured: $('pfe').checked
+    };
+    if (state.editingProductId && state.loadedStock !== undefined) product.stock_loaded = state.loadedStock;
+
+    const fp = JSON.stringify(product);
+    const storageKey = productFingerprintKey(fp);
+    let reqId = '';
+    if (!state.editingProductId) {
+      try { reqId = sessionStorage.getItem(storageKey) || ''; } catch {}
+      if (!reqId) reqId = newProductRequestId();
+      try { sessionStorage.setItem(storageKey, reqId); } catch {}
+      product.request_id = reqId;
+    }
+
+    button.disabled = true;
+    button.textContent = 'Saving…';
+    try {
+      await api('saveProduct', { product });
+      if (!state.editingProductId) try { sessionStorage.removeItem(storageKey); } catch {}
+      closeM();
+      toast('Product saved ✓');
+      await load();
+    } catch (error) {
+      toast(error.message, true);
+      button.disabled = false;
+      button.textContent = 'Save product';
+    }
+  }
+
+  function delProd(id) {
+    confirmDialog({
+      title: 'Delete product?',
+      message: 'Past orders keep their historical snapshots. Products used in Pending orders cannot be deleted.',
+      confirmLabel: 'Delete product',
+      onConfirm: async () => {
+        try {
+          await api('deleteProduct', { id });
+          closeM();
+          toast('Product deleted');
+          await load();
+        } catch (error) { toast(error.message, true); closeM(); }
+      }
+    });
+  }
+
+  /* ===== 8. BULK CSV UPLOAD & IMAGE MATCHER ===== */
+  function parseCsv(rawText) {
+    const text = String(rawText || '').replace(/^\uFEFF/, '');
+    const rows = [];
+    let row = [];
+    let cell = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i];
+      if (inQuotes) {
+        if (ch === '"') {
+          if (text[i + 1] === '"') { cell += '"'; i += 1; }
+          else inQuotes = false;
+        } else {
+          cell += ch;
+        }
+      } else if (ch === '"') {
+        inQuotes = true;
+      } else if (ch === ',') {
+        row.push(cell);
+        cell = '';
+      } else if (ch === '\r' || ch === '\n') {
+        if (ch === '\r' && text[i + 1] === '\n') i += 1;
+        row.push(cell);
+        if (row.some((v) => String(v).trim() !== '')) rows.push(row);
+        row = [];
+        cell = '';
+      } else {
+        cell += ch;
+      }
+    }
+    row.push(cell);
+    if (row.some((v) => String(v).trim() !== '')) rows.push(row);
+    if (!rows.length) return { headers: [], records: [] };
+
+    const headers = rows[0].map((h) => String(h || '').trim().toLowerCase().replace(/[\s-]+/g, '_'));
+    const records = rows.slice(1).map((cols, idx) => {
+      const obj = { _rowNumber: idx + 2 };
+      headers.forEach((h, colIdx) => { if (h) obj[h] = cols[colIdx] !== undefined ? String(cols[colIdx]).trim() : ''; });
+      return obj;
+    });
+    return { headers, records };
+  }
+
+  function validateCsvRows(records, existingProducts = []) {
+    const byId = new Map(existingProducts.map((p) => [String(p.id), p]));
+    const bySku = new Map();
+    existingProducts.forEach((p) => { if (p.sku) bySku.set(String(p.sku).toLowerCase(), p); });
+
+    const seenIds = new Set();
+    const seenSkus = new Set();
+
+    const pick = (r, keys) => {
+      for (const k of keys) {
+        if (r[k] !== undefined && r[k] !== '') return r[k];
+      }
+      return '';
+    };
+
+    return records.map((raw, idx) => {
+      const errors = [];
+      const rowNum = raw._rowNumber || (idx + 2);
+      const id = pick(raw, ['id', 'product_id', 'unique_id']);
+      const sku = pick(raw, ['sku', 'product_sku', 'item_code', 'code']);
+      const name = pick(raw, ['name', 'product_name', 'title']);
+      const description = pick(raw, ['description', 'product_description', 'desc']);
+      const category = pick(raw, ['category', 'product_category']) || 'General';
+      const rawPrice = pick(raw, ['price', 'regular_price', 'selling_price']);
+      const rawDiscount = pick(raw, ['discounted_price', 'sale_price']);
+      const rawCompare = pick(raw, ['compare_at_price', 'original_price', 'list_price']);
+      const rawStock = pick(raw, ['stock', 'stock_quantity', 'quantity', 'qty']);
+      const rawStatus = pick(raw, ['status', 'product_status', 'availability']);
+      const featured = ['yes', 'true', '1'].includes(pick(raw, ['featured', 'is_featured']).toLowerCase());
+      const locked = ['yes', 'true', '1'].includes(pick(raw, ['status_locked']).toLowerCase());
+
+      if (!name) errors.push('Missing product name');
+      else if (name.length > 120) errors.push('Name exceeds 120 chars');
+
+      if (id) {
+        if (seenIds.has(id)) errors.push(`Duplicate ID "${id}" in CSV`);
+        seenIds.add(id);
+      }
+      if (sku) {
+        const lk = sku.toLowerCase();
+        if (seenSkus.has(lk)) errors.push(`Duplicate SKU "${sku}" in CSV`);
+        seenSkus.add(lk);
+      }
+
+      const numPrice = Number(rawPrice);
+      const numDiscount = rawDiscount !== '' ? Number(rawDiscount) : 0;
+      let sellingPrice = numPrice;
+      let compareAt = rawCompare !== '' ? Number(rawCompare) : 0;
+
+      if (rawPrice === '' || !Number.isSafeInteger(numPrice) || numPrice < 1) {
+        errors.push('Price must be a whole number >= 1');
+      } else if (rawDiscount !== '') {
+        if (!Number.isSafeInteger(numDiscount) || numDiscount < 1) {
+          errors.push('Discounted price must be a whole number >= 1');
+        } else if (numDiscount >= numPrice) {
+          errors.push('Discounted price must be lower than price');
+        } else {
+          sellingPrice = numDiscount;
+          if (!compareAt) compareAt = numPrice;
+        }
+      }
+
+      if (compareAt > 0 && (!Number.isSafeInteger(compareAt) || compareAt <= sellingPrice)) {
+        errors.push('Compare-at / original price must exceed selling price');
+      }
+
+      const stock = Number(rawStock === '' ? NaN : rawStock);
+      if (rawStock === '' || !Number.isSafeInteger(stock) || stock < 0) {
+        errors.push('Stock quantity must be a whole number >= 0');
+      }
+
+      let normalizedStatus = '';
+      if (rawStatus) {
+        const match = ['In Stock', 'Few Left', 'Out of Stock'].find((s) => s.toLowerCase() === rawStatus.toLowerCase());
+        if (!match) errors.push(`Invalid status "${rawStatus}"`);
+        else normalizedStatus = match;
+      }
+      if (locked && stock === 0 && normalizedStatus && normalizedStatus !== 'Out of Stock') {
+        errors.push('Zero-stock item cannot have locked non-zero status');
+      }
+
+      const existingMatch = (id && byId.get(id)) || (sku && bySku.get(sku.toLowerCase())) || null;
+      if (existingMatch && sku && bySku.get(sku.toLowerCase()) && bySku.get(sku.toLowerCase()).id !== existingMatch.id) {
+        errors.push(`SKU "${sku}" already belongs to another product`);
+      }
+
+      const finalStatus = Number.isSafeInteger(stock) && stock <= 0
+        ? 'Out of Stock'
+        : (normalizedStatus || (stock <= Number(state.settings.low_stock_threshold || 5) ? 'Few Left' : 'In Stock'));
+
+      return {
+        rowNum,
+        action: existingMatch ? 'Update' : 'Create',
+        errors,
+        valid: errors.length === 0,
+        normalized: {
+          id,
+          sku,
+          name,
+          description,
+          category,
+          price: sellingPrice,
+          compare_at_price: compareAt,
+          stock: Number.isSafeInteger(stock) ? stock : 0,
+          status: finalStatus,
+          status_locked: locked ? 'yes' : 'no',
+          featured
+        }
+      };
+    });
+  }
+
+  function openCsvImportModal() {
+    let parsedPreview = [];
+    modal(`<h3 class="sy">Bulk CSV Product Import</h3>
+      <p class="sm" style="margin-bottom:12px">Upload a CSV with product details. Images are uploaded to Cloudinary separately after importing.</p>
+      <div class="tb-acts" style="margin-bottom:12px">
+        <button class="pb" type="button" id="csv-sample">⬇ Download CSV Template</button>
+        <label class="btn sm-b" style="cursor:pointer">Choose CSV File<input type="file" id="csv-file" accept=".csv,text/csv" class="hide"></label>
+      </div>
+      <div id="csv-summary"></div>
+      <div class="wrap" style="max-height:320px;border:1px solid var(--bd);border-radius:10px" id="csv-preview"><div class="empty">Select a CSV file to preview and validate rows.</div></div>
+      <label class="switch" style="margin-top:10px"><input type="checkbox" id="csv-skip-err"> Import only valid rows (skip rows with errors)</label>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn" type="button" id="csv-go" disabled>Confirm Import</button></div>`, true);
+
+    $('csv-sample').onclick = () => {
+      const sample = [
+        'sku,name,category,price,discounted_price,stock,status,featured,description',
+        'THM-001,Handcrafted Linen Tote,Bags,18500,15000,14,In Stock,yes,"Sturdy everyday linen tote."',
+        'THM-002,Ceramic Pour-Over Mug,Home,9500,,4,Few Left,no,"Matte stoneware mug."'
+      ].join('\n');
+      const url = URL.createObjectURL(new Blob([sample], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'products-template.csv';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    };
+
+    const refreshPreview = () => {
+      const validRows = parsedPreview.filter((r) => r.valid);
+      const errCount = parsedPreview.length - validRows.length;
+      const creates = validRows.filter((r) => r.action === 'Create').length;
+      const updates = validRows.filter((r) => r.action === 'Update').length;
+      const skipErrors = $('csv-skip-err').checked;
+
+      $('csv-summary').innerHTML = parsedPreview.length
+        ? `<div class="${errCount ? 'warn' : 'ok-box'}" style="margin:0 0 12px"><b>${parsedPreview.length} rows parsed:</b> ${creates} new · ${updates} updates · ${errCount} error(s)</div>`
+        : '';
+
+      $('csv-preview').innerHTML = parsedPreview.length
+        ? `<table><thead><tr><th>Row</th><th>Action</th><th>SKU / ID</th><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Validation</th></tr></thead><tbody>${
+          parsedPreview.map((r) => `<tr>
+            <td class="mono sm">${r.rowNum}</td>
+            <td>${r.valid ? pill(r.action === 'Create' ? 'In Stock' : 'Few Left').replace(r.action === 'Create' ? 'In Stock' : 'Few Left', r.action) : pill('Out of Stock').replace('Out of Stock', 'Error')}</td>
+            <td class="mono sm">${esc(r.normalized.sku || r.normalized.id || 'Auto')}</td>
+            <td><b>${esc(r.normalized.name || '—')}</b></td>
+            <td class="sm">${esc(r.normalized.category)}</td>
+            <td class="mono">${Number.isFinite(r.normalized.price) ? money(r.normalized.price) : '—'}${r.normalized.compare_at_price ? ` <span class="sm">(${money(r.normalized.compare_at_price)})</span>` : ''}</td>
+            <td class="mono">${r.normalized.stock}</td>
+            <td class="sm" style="color:${r.valid ? 'var(--g)' : 'var(--t)'}">${r.valid ? 'Ready' : esc(r.errors.join('; '))}</td>
+          </tr>`).join('')
+        }</tbody></table>`
+        : '<div class="empty">No rows found in CSV.</div>';
+
+      const canImport = validRows.length > 0 && (errCount === 0 || skipErrors);
+      $('csv-go').disabled = !canImport;
+      $('csv-go').textContent = canImport ? `Import ${validRows.length} Product${validRows.length === 1 ? '' : 's'}` : 'Fix Errors to Import';
+    };
+
+    $('csv-skip-err').onchange = refreshPreview;
+    $('csv-file').onchange = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      const text = await file.text();
+      const { records } = parseCsv(text);
+      parsedPreview = validateCsvRows(records, state.products);
+      refreshPreview();
+    };
+
+    $('csv-go').onclick = async () => {
+      const validRows = parsedPreview.filter((r) => r.valid).map((r) => r.normalized);
+      if (!validRows.length) return;
+      $('csv-go').disabled = true;
+      $('csv-go').textContent = 'Importing…';
+      try {
+        const res = await api('importProductsCsv', { rows: validRows });
+        await load();
+        modal(`<h3 class="sy">Import Complete</h3>
+          <p class="ok-box" style="margin-top:12px">Created <b>${Number(res.created)}</b> new product(s) and updated <b>${Number(res.updated)}</b> existing product(s) in Google Sheets.</p>
+          <p class="sm">You can now upload product images to Cloudinary and assign them directly to these products.</p>
+          <div class="acts"><button class="btn o" type="button" data-close-modal>Done</button><button class="btn" type="button" id="csv-next-imgs">Upload Product Images →</button></div>`);
+        $('csv-next-imgs').onclick = openBulkImagesModal;
+      } catch (err) {
+        toast(err.message, true);
+        $('csv-go').disabled = false;
+        $('csv-go').textContent = 'Retry Import';
+      }
+    };
+  }
+
+  function matchImageFilenameToProduct(filename, products) {
+    const fullStem = String(filename || '').replace(/\.[^.]+$/, '').trim().toLowerCase();
+    const variantStem = fullStem.replace(/[_-](?:front|back|side|main|\d{1,2})$/i, '').trim();
+    const cleanFull = fullStem.replace(/[^a-z0-9]+/g, '');
+    const cleanVariant = variantStem.replace(/[^a-z0-9]+/g, '');
+    if (!cleanFull) return null;
+
+    for (const p of products) {
+      const sku = String(p.sku || '').trim().toLowerCase();
+      if (!sku) continue;
+      const cleanSku = sku.replace(/[^a-z0-9]+/g, '');
+      if (fullStem === sku || variantStem === sku || cleanFull === cleanSku || cleanVariant === cleanSku ||
+          fullStem.startsWith(sku + '_') || fullStem.startsWith(sku + '-')) {
+        return p;
+      }
+    }
+    for (const p of products) {
+      const id = String(p.id || '').trim().toLowerCase();
+      if (!id) continue;
+      if (fullStem === id || variantStem === id || fullStem.startsWith(id + '_') || fullStem.startsWith(id + '-')) {
+        return p;
+      }
+    }
+    for (const p of products) {
+      const n = String(p.name || '').trim().toLowerCase().replace(/[^a-z0-9]+/g, '');
+      if (n && cleanFull.includes(n)) return p;
+    }
+    return null;
+  }
+
+  function openBulkImagesModal() {
+    const queue = [];
+    modal(`<h3 class="sy">Upload &amp; Assign Product Images</h3>
+      <p class="sm" style="margin-bottom:12px">Name image files with product SKU (e.g. <code class="mono">THM-001.jpg</code> or <code class="mono">THM-001_2.png</code>) for automatic matching, or assign any uploaded photo via dropdown.</p>
+      <div class="tb-acts" style="margin-bottom:12px">
+        <label class="btn sm-b" style="cursor:pointer">Upload Images to Cloudinary<input type="file" id="bi-files" accept="image/jpeg,image/png,image/webp,image/avif" multiple class="hide"></label>
+        <select class="in" id="bi-mode" style="width:auto;margin:0;min-height:36px">
+          <option value="append">Append to existing product images</option>
+          <option value="replace">Replace product images</option>
+        </select>
+      </div>
+      <div class="wrap" style="max-height:320px;border:1px solid var(--bd);border-radius:10px" id="bi-list"><div class="empty">Upload product images to begin assigning them to catalog items.</div></div>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn" type="button" id="bi-save" disabled>Save Image Assignments</button></div>`, true);
+
+    const drawQueue = () => {
+      if (!queue.length) {
+        $('bi-list').innerHTML = '<div class="empty">Upload product images to begin assigning them.</div>';
+        $('bi-save').disabled = true;
+        return;
+      }
+      const opts = state.products.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.sku ? ' (' + esc(p.sku) + ')' : ''}</option>`).join('');
+      $('bi-list').innerHTML = `<table><thead><tr><th>Preview</th><th>File</th><th>Assign to Product</th></tr></thead><tbody>${
+        queue.map((item, idx) => `<tr>
+          <td><img class="thumb" src="${esc(cloudinaryThumb(item.url, 100))}" alt=""></td>
+          <td class="sm"><b>${esc(item.fileName)}</b><div class="sm" style="color:${item.productId ? 'var(--g)' : 'var(--go)'}">${item.productId ? 'Matched' : 'Select product'}</div></td>
+          <td><select class="in" style="margin:0" data-bi-idx="${idx}"><option value="">-- Skip --</option>${opts}</select></td>
+        </tr>`).join('')
+      }</tbody></table>`;
+
+      $('bi-list').querySelectorAll('[data-bi-idx]').forEach((sel) => {
+        const i = Number(sel.dataset.biIdx);
+        sel.value = queue[i].productId || '';
+        sel.onchange = () => {
+          queue[i].productId = sel.value;
+          $('bi-save').disabled = !queue.some((q) => q.productId);
+        };
+      });
+      $('bi-save').disabled = !queue.some((q) => q.productId);
+    };
+
+    $('bi-files').onchange = async (e) => {
+      const files = Array.from(e.target.files || []);
+      if (!files.length) return;
+      if (!isPresetReady()) return toast('Set your Cloudinary upload preset in Settings first.', true);
+      toast('Uploading to Cloudinary…');
+      for (const file of files) {
+        try {
+          const uploaded = await uploadFileToCloudinary(file, 'product');
+          const matched = matchImageFilenameToProduct(file.name, state.products);
+          queue.push({ fileName: file.name, url: uploaded.secure_url, productId: matched ? matched.id : '' });
+          drawQueue();
+        } catch (err) {
+          toast(`${file.name}: ${err.message}`, true);
+        }
+      }
+      e.target.value = '';
+    };
+
+    $('bi-save').onclick = async () => {
+      const grouped = new Map();
+      queue.forEach((item) => {
+        if (!item.productId) return;
+        if (!grouped.has(item.productId)) grouped.set(item.productId, []);
+        grouped.get(item.productId).push(item.url);
+      });
+      const mode = $('bi-mode').value;
+      const assignments = Array.from(grouped.entries()).map(([productId, images]) => ({ productId, images, mode }));
+      if (!assignments.length) return;
+      $('bi-save').disabled = true;
+      $('bi-save').textContent = 'Assigning…';
+      try {
+        const res = await api('assignProductImages', { assignments });
+        closeM();
+        toast(`Images updated on ${Number(res.updated)} product(s) ✓`);
+        await load();
+      } catch (err) {
+        toast(err.message, true);
+        $('bi-save').disabled = false;
+        $('bi-save').textContent = 'Save Image Assignments';
+      }
+    };
+  }
+
+  /* ===== 9. CATEGORIES ===== */
+  function renderCategories() {
+    $('cat-t').innerHTML = state.categories.length ? state.categories.map((c) => {
+      const thumb = secureImageUrl(c.image_url) ? `<img class="thumb" src="${esc(cloudinaryThumb(c.image_url, 100))}" alt="">` : '<div class="thumb"></div>';
+      return `<tr><td>${thumb}</td><td><b>${esc(c.name)}</b></td><td class="hm mono sm">${esc(c.slug)}</td><td class="mono">${Number(c.sort_order || 100)}</td><td>${pill(c.is_active === 'yes' ? 'Active' : 'Inactive')}</td><td><button class="ra" type="button" data-action="edit-cat" data-id="${esc(c.id)}">Edit</button><button class="ra d" type="button" data-action="delete-cat" data-id="${esc(c.id)}">Delete</button></td></tr>`;
+    }).join('') : '<tr><td colspan="6" class="empty">No categories configured yet.</td></tr>';
+  }
+
+  function editCat(id) {
+    const cat = state.categories.find((c) => String(c.id) === String(id)) || { sort_order: 100, is_active: 'yes', image_url: '' };
+    modal(`<h3 class="sy" style="margin-bottom:14px">${cat.id ? 'Edit' : 'Add'} Category</h3>
+      <div class="row2">
+        <div><label class="fl" for="cat-n">Name</label><input class="in" id="cat-n" maxlength="80" value="${esc(cat.name || '')}"></div>
+        <div><label class="fl" for="cat-s">Slug</label><input class="in mono" id="cat-s" maxlength="80" value="${esc(cat.slug || '')}"></div>
+      </div>
+      <div class="row2">
+        <div><label class="fl" for="cat-o">Sort order</label><input class="in" id="cat-o" type="number" min="0" value="${Number(cat.sort_order || 100)}"></div>
+        <div><label class="fl">Visibility</label><label class="switch" style="padding:10px 0"><input type="checkbox" id="cat-a" ${cat.is_active !== 'no' ? 'checked' : ''}> Active on storefront</label></div>
+      </div>
+      <label class="fl" for="cat-d">Description</label>
+      <textarea class="in" id="cat-d" maxlength="400">${esc(cat.description || '')}</textarea>
+      <label class="fl" for="cat-img">Category Image (Cloudinary HTTPS)</label>
+      <input class="in" id="cat-img" type="url" value="${esc(cat.image_url || '')}" placeholder="https://res.cloudinary.com/...">
+      <div class="tb-acts" style="margin-bottom:12px">
+        <label class="pb" style="cursor:pointer">Upload Image<input type="file" id="cat-file" accept="image/jpeg,image/png,image/webp,image/avif" class="hide"></label>
+      </div>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn" type="button" id="cat-save">Save Category</button></div>`);
+
+    $('cat-n').oninput = () => { if (!cat.id) $('cat-s').value = slugify($('cat-n').value); };
+    $('cat-file').onchange = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      try {
+        const res = await uploadFileToCloudinary(file, 'category');
+        $('cat-img').value = res.secure_url;
+        toast('Category image uploaded ✓');
+      } catch (err) { toast(err.message, true); }
+    };
+    $('cat-save').onclick = async () => {
+      try {
+        await api('saveCategory', {
+          category: {
+            id: cat.id || '',
+            name: $('cat-n').value,
+            slug: $('cat-s').value || slugify($('cat-n').value),
+            description: $('cat-d').value,
+            image_url: $('cat-img').value,
+            sort_order: Number($('cat-o').value || 100),
+            is_active: $('cat-a').checked ? 'yes' : 'no'
+          }
+        });
+        closeM();
+        toast('Category saved ✓');
+        await load();
+      } catch (err) { toast(err.message, true); }
+    };
+  }
+
+  function deleteCat(id) {
+    confirmDialog({
+      title: 'Delete category?',
+      message: 'This removes the category row from Google Sheets. Products keep their category text.',
+      confirmLabel: 'Delete category',
+      onConfirm: async () => {
+        try {
+          await api('deleteCategory', { id });
+          closeM();
+          toast('Category deleted');
+          await load();
+        } catch (err) { toast(err.message, true); closeM(); }
+      }
+    });
+  }
+
+  /* ===== 10. HERO IMAGE STUDIO & NAVIGATION ===== */
+  function updatePresetBanner() {
+    const warn = $('preset-warn');
+    if (!warn) return;
+    if (!isPresetReady()) {
+      warn.innerHTML = 'Cloudinary upload preset is not configured yet. Enter your unsigned preset in <b>Settings → Cloudinary Browser Setup</b> (or set <code class="mono">CLOUDINARY_PRESET</code> in <code class="mono">admin.html</code>) before uploading images directly.';
+      warn.classList.remove('hide');
+    } else {
+      warn.classList.add('hide');
+    }
+  }
+
+  function renderHeroForm() {
+    const h = state.hero || {};
+    $('h-url').value = h.image_url || '';
+    $('h-alt').value = h.alt_text || '';
+    $('h-eyebrow').value = h.eyebrow || '';
+    $('h-title').value = h.title || '';
+    $('h-subtitle').value = h.subtitle || '';
+    $('h-cta-label').value = h.cta_label != null ? h.cta_label : 'Shop now';
+    $('h-cta-to').value = h.cta_to || '/shop';
+    $('h-sec-label').value = h.secondary_label || '';
+    $('h-sec-to').value = h.secondary_to || '';
+    $('h-crop-mode').value = ['fill', 'crop', 'fit', 'pad'].includes(h.crop_mode) ? h.crop_mode : 'fill';
+    $('h-focal-point').value = h.focal_point || 'center';
+    $('h-fx').value = h.focal_x != null ? Number(h.focal_x) : 50;
+    $('h-fy').value = h.focal_y != null ? Number(h.focal_y) : 50;
+    $('h-zoom').value = h.zoom != null ? Number(h.zoom) : 1;
+    $('h-overlay').value = h.overlay_opacity != null ? Number(h.overlay_opacity) : 45;
+    $('h-cx').value = h.crop_x !== undefined && h.crop_x !== '' ? Number(h.crop_x) : 0;
+    $('h-cy').value = h.crop_y !== undefined && h.crop_y !== '' ? Number(h.crop_y) : 0;
+    $('h-cw').value = h.crop_w !== undefined && h.crop_w !== '' ? Number(h.crop_w) : 100;
+    $('h-ch').value = h.crop_h !== undefined && h.crop_h !== '' ? Number(h.crop_h) : 100;
+    $('h-fit-d').value = h.fit_desktop || 'cover';
+    $('h-fit-t').value = h.fit_tablet || 'cover';
+    $('h-fit-m').value = h.fit_mobile || 'cover';
+    $('h-hd').value = h.height_desktop || 'standard';
+    $('h-ht').value = h.height_tablet || 'standard';
+    $('h-hm').value = h.height_mobile || 'standard';
+    drawHeroPreview();
+  }
+
+  function collectHeroDraft() {
+    return {
+      image_url: $('h-url').value.trim(),
+      public_id: state.hero.public_id || '',
+      alt_text: $('h-alt').value.trim(),
+      eyebrow: $('h-eyebrow').value.trim(),
+      title: $('h-title').value.trim(),
+      subtitle: $('h-subtitle').value.trim(),
+      cta_label: $('h-cta-label').value.trim(),
+      cta_to: $('h-cta-to').value.trim() || '/shop',
+      secondary_label: $('h-sec-label').value.trim(),
+      secondary_to: $('h-sec-to').value.trim(),
+      crop_mode: $('h-crop-mode').value,
+      focal_point: $('h-focal-point').value,
+      focal_x: Number($('h-fx').value),
+      focal_y: Number($('h-fy').value),
+      zoom: Number($('h-zoom').value),
+      crop_x: $('h-crop-mode').value === 'crop' ? Number($('h-cx').value) : '',
+      crop_y: $('h-crop-mode').value === 'crop' ? Number($('h-cy').value) : '',
+      crop_w: $('h-crop-mode').value === 'crop' ? Number($('h-cw').value) : '',
+      crop_h: $('h-crop-mode').value === 'crop' ? Number($('h-ch').value) : '',
+      fit_desktop: $('h-fit-d').value,
+      fit_tablet: $('h-fit-t').value,
+      fit_mobile: $('h-fit-m').value,
+      height_desktop: $('h-hd').value,
+      height_tablet: $('h-ht').value,
+      height_mobile: $('h-hm').value,
+      overlay_opacity: Number($('h-overlay').value)
+    };
+  }
+
+  function buildHeroPreviewStyle(hero, viewport = 'desktop') {
+    const base = secureImageUrl(hero.image_url);
+    const fit = viewport === 'mobile' ? hero.fit_mobile : (viewport === 'tablet' ? hero.fit_tablet : hero.fit_desktop);
+    const height = viewport === 'mobile' ? hero.height_mobile : (viewport === 'tablet' ? hero.height_tablet : hero.height_desktop);
+    const fx = Number.isFinite(Number(hero.focal_x)) ? Number(hero.focal_x) : 50;
+    const fy = Number.isFinite(Number(hero.focal_y)) ? Number(hero.focal_y) : 50;
+    const zoom = Number.isFinite(Number(hero.zoom)) ? Number(hero.zoom) : 1;
+    const overlay = Number.isFinite(Number(hero.overlay_opacity)) ? Number(hero.overlay_opacity) / 100 : 0.45;
+    let previewUrl = base;
+    if (base && base.includes('res.cloudinary.com') && base.includes('/image/upload/')) {
+      const segments = [];
+      if (hero.crop_mode === 'crop' && Number(hero.crop_w) > 0 && Number(hero.crop_h) > 0) {
+        segments.push(`c_crop,fl_relative,x_${(Number(hero.crop_x || 0) / 100).toFixed(2)},y_${(Number(hero.crop_y || 0) / 100).toFixed(2)},w_${(Number(hero.crop_w) / 100).toFixed(2)},h_${(Number(hero.crop_h) / 100).toFixed(2)}`);
+      }
+      const resizeParts = [];
+      if (hero.crop_mode === 'fit') {
+        resizeParts.push('c_fit');
+      } else if (hero.crop_mode === 'pad') {
+        resizeParts.push('c_pad');
+      } else if (hero.crop_mode !== 'crop') {
+        resizeParts.push('c_fill');
+        const g = hero.focal_point && hero.focal_point !== 'custom' ? hero.focal_point : '';
+        if (g) resizeParts.push(`g_${g}`);
+      }
+      resizeParts.push('f_auto', 'q_auto', `w_${viewport === 'mobile' ? 760 : 1200}`);
+      segments.push(resizeParts.join(','));
+      previewUrl = base.replace('/image/upload/', `/image/upload/${segments.join('/')}/`);
+    }
+    return { previewUrl, fit, height, fx, fy, zoom, overlay };
+  }
+
+  function drawHeroPreview() {
+    const h = collectHeroDraft();
+    $('h-crop-box').classList.toggle('hide', h.crop_mode !== 'crop');
+    $('h-ov-val').textContent = h.overlay_opacity;
+    $('h-fx-val').textContent = h.focal_x;
+    $('h-fy-val').textContent = h.focal_y;
+    $('h-zoom-val').textContent = Number(h.zoom).toFixed(2);
+
+    const spec = buildHeroPreviewStyle(h, state.heroViewport);
+    $('hero-vp-meta').textContent = `${spec.fit} · ${spec.height} · ${spec.fx}% ${spec.fy}%`;
+
+    const canvas = $('hero-preview-canvas');
+    canvas.className = `hero-canvas-frame vp-${state.heroViewport} h-${spec.height}`;
+    const headline = h.title || state.settings.store_name || 'Your Store Name';
+    const sub = h.subtitle || state.settings.tagline || 'Configure your hero copy and Cloudinary image.';
+    const btn1 = h.cta_label ? `<span style="display:inline-block;padding:7px 14px;border-radius:99px;background:var(--acc);color:#fff;font-size:.76rem;font-weight:600">${esc(h.cta_label)}</span>` : '';
+    const btn2 = h.secondary_label ? `<span style="display:inline-block;padding:7px 14px;border-radius:99px;border:1px solid rgba(255,255,255,.55);color:#fff;font-size:.76rem">${esc(h.secondary_label)}</span>` : '';
+
+    canvas.innerHTML = `
+      ${spec.previewUrl ? `<img class="hero-canvas-img" src="${esc(spec.previewUrl)}" alt="" style="object-fit:${spec.fit};object-position:${spec.fx}% ${spec.fy}%;transform:scale(${spec.zoom});transform-origin:${spec.fx}% ${spec.fy}%">` : ''}
+      <div class="hero-canvas-scrim" style="background:linear-gradient(95deg, rgba(11,13,10,${Math.min(0.9, spec.overlay + 0.2).toFixed(2)}) 0%, rgba(11,13,10,${spec.overlay.toFixed(2)}) 58%, rgba(11,13,10,${Math.max(0.08, spec.overlay - 0.15).toFixed(2)}) 100%)"></div>
+      ${spec.previewUrl ? `<div class="hero-focal-dot" style="left:${spec.fx}%;top:${spec.fy}%" title="Focal point ${spec.fx}% ${spec.fy}%"></div>` : ''}
+      <div class="hero-canvas-copy">
+        ${h.eyebrow ? `<div style="font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;opacity:.88">${esc(h.eyebrow)}</div>` : ''}
+        <h4>${esc(headline)}</h4>
+        <p>${esc(sub)}</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">${btn1}${btn2}</div>
+      </div>
+    `;
+  }
+
+  function renderNavTable() {
+    const items = state.navigation.slice().sort((a, b) => Number(a.sort_order || 100) - Number(b.sort_order || 100));
+    $('nav-t').innerHTML = items.map((n, idx) => `
+      <tr data-nav-row="${idx}" data-nav-id="${esc(n.nav_id)}" data-nav-type="${esc(n.type || 'builtin')}">
+        <td><input class="in" data-nf="label" value="${esc(n.label)}" style="margin:0;min-height:36px"></td>
+        <td class="mono sm"><input class="in mono sm" data-nf="target" value="${esc(n.target)}" style="margin:0;min-height:36px" readonly></td>
+        <td><input class="in" data-nf="sort_order" type="number" min="0" value="${Number(n.sort_order || 100)}" style="margin:0;min-height:36px;width:78px"></td>
+        <td><label class="switch"><input type="checkbox" data-nf="is_visible" ${n.is_visible !== 'no' ? 'checked' : ''}> Show</label></td>
+      </tr>
+    `).join('');
+  }
+
+  /* ===== 11. DYNAMIC CUSTOM PAGES ===== */
+  function renderCustomPages() {
+    $('pg-t').innerHTML = state.customPages.length ? state.customPages.map((p) => {
+      const routeHref = `./index.html#/page/${encodeURIComponent(p.slug)}`;
+      return `<tr>
+        <td><b>${esc(p.title)}</b><div class="mono sm"><a href="${esc(routeHref)}" target="_blank" rel="noopener">#/page/${esc(p.slug)} ↗</a></div></td>
+        <td class="sm"><div>${esc(p.file_name || 'page.html')}</div><div class="mono sm">${fmtBytes(p.file_size)}</div></td>
+        <td class="sm">${p.show_in_nav === 'yes' ? `${esc(p.nav_label || p.title)} (#${Number(p.nav_order || 100)})` : 'Hidden'}</td>
+        <td>
+          <button type="button" class="ra ${p.is_active === 'yes' ? 'go' : ''}" data-action="toggle-page" data-id="${esc(p.page_id)}" data-next="${p.is_active === 'yes' ? 'no' : 'yes'}">
+            ${p.is_active === 'yes' ? 'Active (Click to Deactivate)' : 'Inactive (Click to Activate)'}
+          </button>
+        </td>
+        <td>
+          <button class="ra" type="button" data-action="preview-page" data-id="${esc(p.page_id)}">Preview</button>
+          <button class="ra" type="button" data-action="edit-page" data-id="${esc(p.page_id)}">Edit</button>
+          <button class="ra d" type="button" data-action="delete-page" data-id="${esc(p.page_id)}">Delete</button>
+        </td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="5" class="empty">No custom HTML pages uploaded yet.</td></tr>';
+  }
+
+  function editCustomPage(pageId) {
+    const existing = state.customPages.find((p) => String(p.page_id) === String(pageId)) || null;
+    let uploadedHtml = '';
+    let uploadedFileName = existing ? existing.file_name : '';
+
+    modal(`<h3 class="sy" style="margin-bottom:12px">${existing ? 'Edit Custom Page' : 'Upload Custom HTML Page'}</h3>
+      <p class="sm" style="margin-bottom:12px">Uploaded HTML files are saved to Google Drive. Toggle <b>Active</b> anytime here or directly in the Google Sheets <code class="mono">CustomPages</code> tab.</p>
+      <div class="row2">
+        <div><label class="fl" for="cp-title">Page Title</label><input class="in" id="cp-title" maxlength="120" value="${esc(existing ? existing.title : '')}"></div>
+        <div><label class="fl" for="cp-slug">URL Slug</label><input class="in mono" id="cp-slug" maxlength="100" value="${esc(existing ? existing.slug : '')}" placeholder="e.g. lookbook"></div>
+      </div>
+      <div class="row3">
+        <div><label class="fl" for="cp-nlabel">Nav Menu Label</label><input class="in" id="cp-nlabel" maxlength="60" value="${esc(existing ? existing.nav_label : '')}"></div>
+        <div><label class="fl" for="cp-norder">Nav Order</label><input class="in" id="cp-norder" type="number" min="0" value="${existing ? Number(existing.nav_order || 100) : 100}"></div>
+        <div><label class="fl">Status</label>
+          <label class="switch" style="margin-bottom:6px"><input type="checkbox" id="cp-active" ${!existing || existing.is_active === 'yes' ? 'checked' : ''}> Active</label>
+          <label class="switch"><input type="checkbox" id="cp-nav" ${!existing || existing.show_in_nav === 'yes' ? 'checked' : ''}> Show in Nav</label>
+        </div>
+      </div>
+      <label class="fl" for="cp-desc">Meta Description (optional)</label>
+      <input class="in" id="cp-desc" maxlength="300" value="${esc(existing ? existing.meta_description || '' : '')}">
+      <div class="dropzone" id="cp-drop">
+        <div style="margin-bottom:8px"><b>${existing ? 'Replace HTML File (optional)' : 'Upload HTML File (.html or .htm, max 1 MB)'}</b></div>
+        <div class="sm" id="cp-finfo">${existing ? `Current Drive file: ${esc(existing.file_name)} (${fmtBytes(existing.file_size)})` : 'No file selected yet.'}</div>
+        <label class="btn o sm-b" style="margin-top:10px;cursor:pointer">Select HTML File<input type="file" id="cp-file" accept=".html,.htm,text/html" class="hide"></label>
+      </div>
+      <div id="cp-prev-wrap" class="hide" style="margin-bottom:12px">
+        <div class="fl">Sandboxed HTML Preview</div>
+        <iframe id="cp-prev-frame" class="sandbox-frame" sandbox="allow-scripts" title="Custom HTML page preview"></iframe>
+      </div>
+      <div class="acts">
+        ${existing ? '<button class="btn o" type="button" id="cp-load-prev">Load Current Drive Preview</button>' : ''}
+        <button class="btn o" type="button" data-close-modal>Cancel</button>
+        <button class="btn" type="button" id="cp-save">${existing ? 'Save Changes' : 'Upload to Drive &amp; Save'}</button>
+      </div>`, true);
+
+    $('cp-title').oninput = () => {
+      if (!existing && !$('cp-slug').dataset.touched) $('cp-slug').value = slugify($('cp-title').value);
+      if (!existing && !$('cp-nlabel').dataset.touched) $('cp-nlabel').value = $('cp-title').value;
+    };
+    $('cp-slug').oninput = () => { $('cp-slug').dataset.touched = '1'; };
+    $('cp-nlabel').oninput = () => { $('cp-nlabel').dataset.touched = '1'; };
+
+    const readHtmlFile = async (file) => {
+      if (!/\.html?$/i.test(file.name) && file.type !== 'text/html') return toast('Upload a valid .html or .htm file.', true);
+      if (file.size > 1024 * 1024) return toast('HTML file exceeds the 1 MB size limit.', true);
+      const html = await file.text();
+      if (!/[<>]/.test(html)) return toast('File does not contain valid HTML markup.', true);
+      uploadedHtml = html;
+      uploadedFileName = file.name;
+      $('cp-finfo').textContent = `Selected: ${file.name} (${fmtBytes(html.length)})`;
+      if (!$('cp-title').value.trim()) {
+        const titleMatch = /<title[^>]*>([^<]+)<\/title>/i.exec(html);
+        const derived = titleMatch ? titleMatch[1].trim() : file.name.replace(/\.html?$/i, '');
+        $('cp-title').value = derived.slice(0, 120);
+        if (!$('cp-slug').value) $('cp-slug').value = slugify(derived);
+        if (!$('cp-nlabel').value) $('cp-nlabel').value = $('cp-title').value.slice(0, 60);
+      }
+      $('cp-prev-frame').srcdoc = html;
+      $('cp-prev-wrap').classList.remove('hide');
+    };
+
+    $('cp-file').onchange = (e) => { if (e.target.files && e.target.files[0]) readHtmlFile(e.target.files[0]); };
+    $('cp-drop').ondragover = (e) => { e.preventDefault(); $('cp-drop').classList.add('drag'); };
+    $('cp-drop').ondragleave = () => $('cp-drop').classList.remove('drag');
+    $('cp-drop').ondrop = (e) => {
+      e.preventDefault();
+      $('cp-drop').classList.remove('drag');
+      if (e.dataTransfer.files && e.dataTransfer.files[0]) readHtmlFile(e.dataTransfer.files[0]);
+    };
+
+    if ($('cp-load-prev')) {
+      $('cp-load-prev').onclick = async () => {
+        try {
+          const res = await api('getAdminPageContent', { page_id: existing.page_id });
+          $('cp-prev-frame').srcdoc = res.html || '';
+          $('cp-prev-wrap').classList.remove('hide');
+        } catch (err) { toast(err.message, true); }
+      };
+    }
+
+    $('cp-save').onclick = async () => {
+      const slug = slugify($('cp-slug').value || $('cp-title').value);
+      if (!String($('cp-title').value).trim()) return toast('Enter a page title.', true);
+      if (!slug) return toast('Enter a valid URL slug.', true);
+      if (RESERVED_SLUGS.includes(slug)) return toast(`Slug "${slug}" is reserved for built-in storefront routes.`, true);
+      if (!existing && !uploadedHtml) return toast('Select an HTML file to upload.', true);
+
+      $('cp-save').disabled = true;
+      $('cp-save').textContent = 'Saving to Drive…';
+      try {
+        await api('saveCustomPage', {
+          page: {
+            page_id: existing ? existing.page_id : '',
+            title: $('cp-title').value.trim(),
+            slug,
+            nav_label: $('cp-nlabel').value.trim() || $('cp-title').value.trim(),
+            nav_order: Number($('cp-norder').value || 100),
+            meta_description: $('cp-desc').value.trim(),
+            is_active: $('cp-active').checked ? 'yes' : 'no',
+            show_in_nav: $('cp-nav').checked ? 'yes' : 'no',
+            file_name: uploadedFileName || (slug + '.html'),
+            html_content: uploadedHtml || undefined
+          }
+        });
+        closeM();
+        toast('Custom page saved to Drive & Sheets ✓');
+        await load();
+      } catch (err) {
+        toast(err.message, true);
+        $('cp-save').disabled = false;
+        $('cp-save').textContent = existing ? 'Save Changes' : 'Upload to Drive & Save';
+      }
+    };
+  }
+
+  async function previewCustomPage(pageId) {
+    try {
+      const res = await api('getAdminPageContent', { page_id: pageId });
+      modal(`<h3 class="sy">Preview: ${esc(res.title)}</h3>
+        <p class="mono sm" style="margin-bottom:10px">#/page/${esc(res.slug)}</p>
+        <iframe class="sandbox-frame" sandbox="allow-scripts" title="Custom page preview"></iframe>
+        <div class="acts"><button class="btn o" type="button" data-close-modal>Close</button></div>`, true);
+      $('md').querySelector('iframe').srcdoc = res.html || '<p>Empty HTML file.</p>';
+    } catch (err) { toast(err.message, true); }
+  }
+
+  async function togglePageActive(pageId, nextVal) {
+    try {
+      await api('toggleCustomPage', { page_id: pageId, is_active: nextVal });
+      toast(nextVal === 'yes' ? 'Custom page activated ✓' : 'Custom page deactivated');
+      await load();
+    } catch (err) { toast(err.message, true); }
+  }
+
+  function deletePage(pageId) {
+    confirmDialog({
+      title: 'Delete custom page?',
+      message: 'This moves the HTML file in Google Drive to Trash and removes the page row from Sheets.',
+      confirmLabel: 'Delete page',
+      onConfirm: async () => {
+        try {
+          await api('deleteCustomPage', { page_id: pageId });
+          closeM();
+          toast('Custom page deleted');
+          await load();
+        } catch (err) { toast(err.message, true); closeM(); }
+      }
+    });
+  }
+
+  /* ===== 12. CUSTOMERS ===== */
+  function renderCust() {
+    const query = ($('cs').value || '').toLowerCase();
+    const filtered = state.customers.filter((c) => !query || (`${c.name} ${c.email}`).toLowerCase().includes(query));
+    $('ct').innerHTML = filtered.length ? filtered.map((c) => `<tr>
+      <td><b>${esc(c.name)}</b><div class="sm">${esc(c.email)}${c.tags ? ' · ' + esc(c.tags) : ''}</div></td>
+      <td class="hm sm">${esc(c.phone)}</td>
+      <td>${Number(c.total_orders) || 0}</td>
+      <td class="mono">${money(c.total_spent)}</td>
+      <td>${c.newsletter_opt_in === 'yes' ? '<span class="pill s-g">Subscribed</span>' : '<span class="pill s-a">No</span>'}</td>
+      <td><button class="ra" type="button" data-action="edit-customer" data-email="${esc(c.email)}">Notes</button></td>
+    </tr>`).join('') : '<tr><td colspan="6" class="empty">No customers yet</td></tr>';
+  }
+
+  function editCust(email) {
+    const c = state.customers.find((i) => i.email === email);
+    if (!c) return;
+    state.editingCustomerEmail = c.email;
+    modal(`<h3 class="sy">${esc(c.name)}</h3>
+      <p class="sm" style="margin-bottom:14px">${esc(c.email)} · ${esc(c.phone)}<br>${esc(c.address)}<br>First order ${esc(String(c.first_order_at).slice(0, 10))} · Last ${esc(String(c.last_order_at).slice(0, 10))}</p>
+      <label class="fl" for="ctg">Tags (e.g. VIP, Wholesale)</label><input class="in" id="ctg" maxlength="200" value="${esc(c.tags || '')}">
+      <label class="fl" for="cn">Private notes</label><textarea class="in" id="cn" maxlength="1000">${esc(c.notes || '')}</textarea>
+      <div class="acts"><button class="btn o" type="button" data-close-modal>Cancel</button><button class="btn" type="button" id="cust-save">Save</button></div>`);
+    $('cust-save').onclick = async () => {
+      try {
+        await api('updateCustomer', { email: state.editingCustomerEmail, tags: $('ctg').value, notes: $('cn').value });
+        closeM();
+        toast('Saved ✓');
+        await load();
+      } catch (err) { toast(err.message, true); }
+    };
+  }
+
+  function csvValue(value) {
+    let text = String(value == null ? '' : value);
+    if (/^[\u0000-\u0020]*[=+\-@]/.test(text)) text = "'" + text;
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+
+  function exportSubs() {
+    const rows = state.customers.filter((c) => c.newsletter_opt_in === 'yes');
+    if (!rows.length) return toast('No subscribers yet', true);
+    const csv = 'Name,Email,Subscribed on\n' + rows.map((c) => [c.name, c.email, c.newsletter_date].map(csvValue).join(',')).join('\n');
+    const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'subscribers.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  /* ===== 13. SETTINGS ===== */
+  const FIELDS = [
+    ['store_name', 'Store name', 'text'],
+    ['owner_email', 'Owner email (alerts & daily summary)', 'email'],
+    ['whatsapp_number', 'WhatsApp number (e.g. 2348012345678)', 'tel'],
+    ['currency_symbol', 'Currency symbol', 'text'],
+    ['brand_color', 'Brand colour (six-digit hex)', 'text'],
+    ['logo_url', 'Logo URL (HTTPS)', 'url'],
+    ['banner_text', 'Storefront announcement banner', 'text'],
+    ['categories', 'Default category names (comma separated)', 'text'],
+    ['low_stock_threshold', '"Few Left" at or below', 'number'],
+    ['dashboard_url', 'Dashboard link (HTTPS)', 'url'],
+    ['tagline', 'Tagline (under store name)', 'text'],
+    ['about_title', 'About page heading', 'text'],
+    ['about_text', 'About page text (your brand story)', 'textarea'],
+    ['contact_phone', 'Public phone number', 'tel'],
+    ['contact_email', 'Public contact email', 'email'],
+    ['contact_address', 'Shop address', 'text'],
+    ['opening_hours', 'Opening hours', 'text'],
+    ['instagram_url', 'Instagram link (HTTPS)', 'url'],
+    ['cloudinary_api_key', 'Cloudinary Public API Key (optional, for Account Media Library)', 'text']
+  ];
+
+  function renderSet() {
+    $('sf').innerHTML = FIELDS.map(([key, label, type]) => {
+      const val = esc(state.settings[key] || '');
+      if (type === 'textarea') return `<label class="fl" for="f-${key}">${label}</label><textarea class="in" rows="4" data-k="${key}" id="f-${key}">${val}</textarea>`;
+      if (key === 'logo_url') {
+        return `<label class="fl" for="f-${key}">${label}</label><div style="display:flex;gap:8px;margin-bottom:14px"><input class="in" style="margin:0" type="url" data-k="${key}" id="f-${key}" value="${val}"><label class="pb" style="cursor:pointer;white-space:nowrap">Upload<input type="file" id="logo-file" accept="image/jpeg,image/png,image/webp" class="hide"></label></div>`;
+      }
+      const extra = type === 'number' ? ' min="0" step="1"' : '';
+      return `<label class="fl" for="f-${key}">${label}</label><input class="in" type="${type}" data-k="${key}" id="f-${key}" value="${val}"${extra}>`;
+    }).join('');
+
+    if ($('logo-file')) {
+      $('logo-file').onchange = async (e) => {
+        const f = e.target.files && e.target.files[0];
+        if (!f) return;
+        try {
+          const res = await uploadFileToCloudinary(f, 'logo');
+          $('f-logo_url').value = res.secure_url;
+          toast('Logo uploaded ✓');
+        } catch (err) { toast(err.message, true); }
+      };
+    }
+    $('cl-cloud').value = CONFIG.CLOUDINARY_CLOUD;
+    $('cl-preset').value = isPresetReady() ? activePreset() : '';
+  }
+
+  /* ===== 14. MODALS, TABS & EVENTS ===== */
+  function modal(html, wide = false) {
+    const box = $('md');
+    box.className = 'modal' + (wide ? ' wide' : '');
+    box.innerHTML = html;
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    $('mb').classList.add('on');
+    const first = box.querySelector('input,select,textarea,button');
+    if (first) first.focus();
+  }
+
+  function closeM() {
+    $('mb').classList.remove('on');
+  }
+
+  function switchTab(tabKey) {
+    document.querySelectorAll('.tab,.panel').forEach((n) => n.classList.remove('on'));
+    const tabBtn = document.querySelector(`.tab[data-t="${tabKey}"]`);
+    const panel = $('p-' + tabKey);
+    if (tabBtn) tabBtn.classList.add('on');
+    if (panel) panel.classList.add('on');
+  }
+
+  function bindEvents() {
+    $('lgb').onclick = login;
+    $('tok').onkeydown = (e) => { if (e.key === 'Enter') login(); };
+    $('btn-refresh').onclick = load;
+    $('btn-logout').onclick = logout;
+    $('btn-clear-cache').onclick = async () => {
+      try { await api('clearPublicCache'); toast('Storefront cache cleared ✓'); }
+      catch (err) { toast(err.message, true); }
+    };
+    $('btn-add-prod').onclick = () => editProd();
+    $('btn-csv-import').onclick = openCsvImportModal;
+    $('btn-bulk-img').onclick = openBulkImagesModal;
+    $('btn-add-cat').onclick = () => editCat();
+    $('btn-add-page').onclick = () => editCustomPage();
+    $('btn-export-subs').onclick = exportSubs;
+
+    $('btn-save-settings').onclick = async () => {
+      const values = {};
+      document.querySelectorAll('#sf [data-k]').forEach((i) => { values[i.dataset.k] = i.value; });
+      try {
+        await api('saveSettings', { settings: values });
+        toast('Settings saved ✓');
+        await load();
+      } catch (err) { toast(err.message, true); }
+    };
+
+    $('btn-save-preset').onclick = () => {
+      const val = $('cl-preset').value.trim();
+      if (!val || val.startsWith('REPLACE_WITH_')) return toast('Enter a valid Cloudinary unsigned upload preset name.', true);
+      try { localStorage.setItem('thimble_cloudinary_preset', val); } catch {}
+      updatePresetBanner();
+      toast('Upload preset saved in browser ✓');
+    };
+
+    // Hero Studio controls
+    ['h-url', 'h-alt', 'h-eyebrow', 'h-title', 'h-subtitle', 'h-cta-label', 'h-cta-to', 'h-sec-label', 'h-sec-to',
+      'h-crop-mode', 'h-focal-point', 'h-fx', 'h-fy', 'h-zoom', 'h-overlay',
+      'h-cx', 'h-cy', 'h-cw', 'h-ch', 'h-fit-d', 'h-fit-t', 'h-fit-m', 'h-hd', 'h-ht', 'h-hm'
+    ].forEach((id) => {
+      if ($(id)) $(id).addEventListener('input', drawHeroPreview);
+      if ($(id)) $(id).addEventListener('change', drawHeroPreview);
+    });
+
+    $('hero-vp-btns').onclick = (e) => {
+      const b = e.target.closest('[data-vp]');
+      if (!b) return;
+      state.heroViewport = b.dataset.vp;
+      $('hero-vp-btns').querySelectorAll('button').forEach((btn) => btn.classList.toggle('on', btn === b));
+      drawHeroPreview();
+    };
+
+    $('hero-preview-canvas').onclick = (e) => {
+      const rect = $('hero-preview-canvas').getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const x = Math.max(0, Math.min(100, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
+      const y = Math.max(0, Math.min(100, Math.round(((e.clientY - rect.top) / rect.height) * 100)));
+      $('h-fx').value = x;
+      $('h-fy').value = y;
+      $('h-focal-point').value = 'custom';
+      drawHeroPreview();
+    };
+
+    $('hero-file').onchange = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      try {
+        toast('Uploading hero image…');
+        const res = await uploadFileToCloudinary(file, 'hero');
+        $('h-url').value = res.secure_url;
+        state.hero.public_id = res.public_id || '';
+        drawHeroPreview();
+        toast('Hero image uploaded. Review preview and click Publish.');
+      } catch (err) { toast(err.message, true); }
+      e.target.value = '';
+    };
+
+    $('btn-hero-widget').onclick = () => openCloudinaryUploadWidget({
+      cropping: true,
+      multiple: false,
+      tag: 'hero',
+      onSuccess(info) {
+        $('h-url').value = info.secure_url;
+        state.hero.public_id = info.public_id || '';
+        drawHeroPreview();
+        toast('Hero image cropped & uploaded. Review preview and Publish.');
+      }
+    });
+
+    $('btn-hero-library').onclick = () => openMediaLibraryPicker((url, pid) => {
+      $('h-url').value = url;
+      state.hero.public_id = pid || '';
+      drawHeroPreview();
+    });
+
+    $('btn-hero-remove').onclick = () => {
+      $('h-url').value = '';
+      state.hero.public_id = '';
+      drawHeroPreview();
+    };
+
+    $('btn-save-hero').onclick = async () => {
+      const btn = $('btn-save-hero');
+      btn.disabled = true;
+      btn.textContent = 'Publishing…';
+      try {
+        const res = await api('saveHeroSettings', { hero: collectHeroDraft() });
+        state.hero = res.hero || state.hero;
+        renderHeroForm();
+        renderOv();
+        toast('Hero settings published ✓');
+      } catch (err) {
+        toast(err.message, true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Publish Hero Settings';
+      }
+    };
+
+    $('btn-save-nav').onclick = async () => {
+      const rows = [];
+      $('nav-t').querySelectorAll('tr[data-nav-row]').forEach((tr) => {
+        rows.push({
+          nav_id: tr.dataset.navId,
+          type: tr.dataset.navType || 'builtin',
+          label: tr.querySelector('[data-nf="label"]').value.trim(),
+          target: tr.querySelector('[data-nf="target"]').value.trim(),
+          sort_order: Number(tr.querySelector('[data-nf="sort_order"]').value || 100),
+          is_visible: tr.querySelector('[data-nf="is_visible"]').checked ? 'yes' : 'no'
+        });
+      });
+      try {
+        const res = await api('saveNavigation', { navigation: rows });
+        state.navigation = res.navigation || rows;
+        renderNavTable();
+        toast('Navigation saved ✓');
+      } catch (err) { toast(err.message, true); }
+    };
+
+    // Tabs & table delegates
+    document.querySelectorAll('.tab').forEach((b) => { b.onclick = () => switchTab(b.dataset.t); });
+    document.querySelectorAll('#oc .chip').forEach((c) => {
+      c.onclick = () => {
+        document.querySelectorAll('#oc .chip').forEach((n) => n.classList.remove('on'));
+        c.classList.add('on');
+        state.orderStatus = c.dataset.s;
+        state.orderPage = 1;
+        renderOrders();
+      };
+    });
+
+    $('os').oninput = (e) => { state.orderQuery = e.target.value.toLowerCase(); state.orderPage = 1; renderOrders(); };
+    $('prs').oninput = (e) => { state.productQuery = e.target.value; renderProds(); };
+    $('cs').oninput = renderCust;
+
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeM(); });
+    $('mb').addEventListener('click', (e) => { if (e.target === $('mb')) closeM(); });
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-close-modal]')) return closeM();
+      const jump = e.target.closest('[data-jump]');
+      if (jump) return switchTab(jump.dataset.jump);
+      const control = e.target.closest('[data-action]');
+      if (!control) return;
+      const action = control.dataset.action;
+      if (action === 'pay') openPay(control.dataset.id);
+      else if (action === 'view-order') openView(control.dataset.id);
+      else if (action === 'cancel') cancelOrd(control.dataset.id);
+      else if (action === 'undo-payment') revertPay(control.dataset.id);
+      else if (action === 'page') { state.orderPage = Number(control.dataset.page) || 1; renderOrders(); }
+      else if (action === 'edit-product') editProd(control.dataset.id);
+      else if (action === 'delete-product') delProd(control.dataset.id);
+      else if (action === 'remove-image') {
+        const idx = Number(control.dataset.index);
+        if (Number.isInteger(idx) && idx >= 0 && idx < state.imgDraft.length) { state.imgDraft.splice(idx, 1); drawImgs(); }
+      }
+      else if (action === 'edit-cat') editCat(control.dataset.id);
+      else if (action === 'delete-cat') deleteCat(control.dataset.id);
+      else if (action === 'edit-page') editCustomPage(control.dataset.id);
+      else if (action === 'preview-page') previewCustomPage(control.dataset.id);
+      else if (action === 'toggle-page') togglePageActive(control.dataset.id, control.dataset.next);
+      else if (action === 'delete-page') deletePage(control.dataset.id);
+      else if (action === 'edit-customer') editCust(control.dataset.email);
+    });
+  }
+
+  async function initAdmin() {
+    bindEvents();
+    try { state.session = sessionStorage.getItem('s') || ''; } catch {}
+    if (state.session) {
+      const ok = await load();
+      if (ok) {
+        $('login').classList.add('hide');
+        $('app').classList.remove('hide');
+      } else {
+        logout();
+      }
+    }
+  }
+
+  globalThis.__ADMIN_APP__ = {
+    CONFIG,
+    state,
+    parseCsv,
+    validateCsvRows,
+    matchImageFilenameToProduct,
+    buildHeroPreviewStyle,
+    renderAll,
+    initAdmin,
+    load,
+    openCsvImportModal,
+    openBulkImagesModal
+  };
+
+  if (!globalThis.__THIMBLE_NO_AUTO_MOUNT__) {
+    initAdmin();
+  }
+})();
+</script>
+</body>
+</html>

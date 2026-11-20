@@ -1,15 +1,23 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
 
-// Storefront builds to dist/store (publish this folder to the client's storefront Netlify site).
-// The owner dashboard builds separately to dist/admin (see scripts/build-admin.mjs).
 export default defineConfig({
-  plugins: [react()],
-  build: { outDir: 'dist/store', emptyOutDir: true, sourcemap: false },
+  server: { host: '0.0.0.0', port: 3000, allowedHosts: 'all' },
+  build: {
+    outDir: 'dist/store',
+    emptyOutDir: true,
+    sourcemap: false,
+    rollupOptions: {
+      input: {
+        main: 'index.html',
+        admin: 'admin.html',
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./tests/setup.js'],
     include: ['tests/**/*.test.{js,jsx}'],
+    exclude: ['tests/backend.test.js', 'node_modules/**'],
   },
 });
